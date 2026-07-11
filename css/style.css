@@ -34,10 +34,10 @@
   #soundBtn {
     position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
     font-family: 'Fredoka', sans-serif;
-    width: 44px; height: 44px; border-radius: 50%;
+    width: 50px; height: 50px; border-radius: 50%;
     background: linear-gradient(180deg, #5c4222, #4a3319);
     border: 2.5px solid #2e2010;
-    color: #fff; font-size: 19px; cursor: pointer; pointer-events: auto;
+    color: #fff; font-size: 22px; cursor: pointer; pointer-events: auto;
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 6px 10px rgba(0,0,0,0.30),
                 inset 0 1.5px 0 rgba(255,255,255,0.18);
