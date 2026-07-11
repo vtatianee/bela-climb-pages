@@ -48,7 +48,7 @@ function initLevel() {
     const center = o.x + o.w/2;
     let nw = o.w * widthMul;                // shrink width on hard mode
     if (i === 0) nw = Math.max(nw, 92);     // first platform stays usable (Bela + obstacle fit)
-    p.w = Math.max(22, nw);
+    p.w = Math.max(32, nw);         // piso de largura: pouso não vira loteria nas subfases altas
     p.x = center - p.w/2;                   // keep platform centered where it was
     p.y = o.y;
   });

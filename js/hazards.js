@@ -159,13 +159,15 @@ function updateHazards() {
     }
   }
 
-  // --- (3) pedras rolantes ---
-  rockTimer -= dt;
-  if (rockTimer <= 0) {
-    rockTimer = rockInterval + Math.random() * 800; // frequência cresce com a profundidade
-    const r = 11 + Math.random() * 6;
-    rocks.push({ x: 40 + Math.random() * (W - 80), y: -20, vx: (Math.random() - 0.5) * 1.2, vy: 2.4 + Math.random() * 1.2, r, spin: 0 });
-    beep(300, 0.15, 'sawtooth', 0.08, 160);
+  // --- (3) pedras rolantes (introduzidas a partir do Mundo 2 = world >= 1) ---
+  if (world >= 1) {
+    rockTimer -= dt;
+    if (rockTimer <= 0) {
+      rockTimer = rockInterval + Math.random() * 800; // frequência cresce com a profundidade
+      const r = 11 + Math.random() * 6;
+      rocks.push({ x: 40 + Math.random() * (W - 80), y: -20, vx: (Math.random() - 0.5) * 1.2, vy: 2.4 + Math.random() * 1.2, r, spin: 0 });
+      beep(300, 0.15, 'sawtooth', 0.08, 160);
+    }
   }
   for (const rk of rocks) {
     rk.x += rk.vx; rk.y += rk.vy; rk.vy += 0.05; rk.spin += rk.vx * 0.05 + 0.04;
@@ -181,20 +183,22 @@ function updateHazards() {
   }
   rocks = rocks.filter(rk => rk.y < H + 30 && !rk.hit);
 
-  // --- (4) Lobo Faminto subindo da base (após 10s de carência) ---
-  if (wolfDelay > 0) {
-    wolfDelay -= dt;
-  } else {
-    wolfY -= wolfSpeed * 2; // sobe devagar, mais rápido conforme a profundidade
-    if (goat.y + GOAT_R >= wolfY) {
-      // o lobo alcançou a cabra — fim de jogo instantâneo
-      triggerHaptic('HEAVY'); // impacto tátil forte de colisão fatal
-      lost = true;
-      goat.face = 'sad';
-      sndFall();
-      showMsg("🐺 O Lobo Faminto pegou a Bela! Fim de jogo.");
-      btnNext.style.display = 'block';
-      btnNext.textContent = '↻ Reiniciar Fase';
+  // --- (4) Lobo Faminto subindo da base (introduzido a partir do Mundo 3 = world >= 2) ---
+  if (world >= 2) {
+    if (wolfDelay > 0) {
+      wolfDelay -= dt;
+    } else {
+      wolfY -= wolfSpeed * 2; // sobe devagar, mais rápido conforme a profundidade
+      if (goat.y + GOAT_R >= wolfY) {
+        // o lobo alcançou a cabra — fim de jogo instantâneo
+        triggerHaptic('HEAVY'); // impacto tátil forte de colisão fatal
+        lost = true;
+        goat.face = 'sad';
+        sndFall();
+        showMsg("🐺 O Lobo Faminto pegou a Bela! Fim de jogo.");
+        btnNext.style.display = 'block';
+        btnNext.textContent = '↻ Reiniciar Fase';
+      }
     }
   }
 }
