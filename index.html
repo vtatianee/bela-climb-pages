@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Bela Climb</title>
+
+<!-- Fonte: pode ser trocada por arquivo local (www/css/fonts) para rodar 100% offline -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Folha de estilo separada -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="gameWrapper">
+  <canvas id="c" width="420" height="680"></canvas>
+  <div class="super-capim" id="superCapim">
+    <div class="folha folha-esquerda"></div>
+    <div class="folha folha-centro"></div>
+    <div class="folha folha-direita"></div>
+  </div>
+  <div id="ui">
+    <div class="badge" id="lvlBadge"><span class="icon">⛰️</span><span id="lvlText">Fase 1</span></div>
+    <div class="badge" id="tryBadge"><span class="icon">🐾</span><span id="tryText">5</span></div>
+  </div>
+  <div id="soundBtn">🔊</div>
+  <div id="message"></div>
+  <button id="btnNext">Próxima Fase →</button>
+  <div id="title">
+    <h1>BELA</h1>
+    <div class="sub">C L I M B</div>
+    <div class="diffPrompt">Escolha a dificuldade</div>
+    <button class="diffBtn easy" id="btnEasy"><span class="emoji">🐑</span> Modo Cabra Mansa</button>
+    <button class="diffBtn hard" id="btnHard"><span class="emoji">⚡</span> Modo Cabra da Peste</button>
+    <div class="hint">Arraste a Bela para trás e solte para pular entre as plataformas. Desvie do obstáculo na base e suba os 5 biomas até o Super Capim Sagrado. Cada salto conta: errar custa uma vida 🐾 (até 5).</div>
+  </div>
+</div>
+
+<!--
+  Scripts carregados em ordem de dependência.
+  config.js declara o estado global; os módulos seguintes o utilizam;
+  game.js orquestra tudo e inicia o jogo por último.
+-->
+<script src="js/config.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/hazards.js"></script>
+<script src="js/render.js"></script>
+<script src="js/input.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

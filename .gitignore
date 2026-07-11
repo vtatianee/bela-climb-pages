@@ -1,0 +1,5 @@
+# lixo do macOS
+.DS_Store
+# lixo comum de editores
+*.swp
+Thumbs.db
