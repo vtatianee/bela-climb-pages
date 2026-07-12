@@ -3,3 +3,5 @@
 # lixo comum de editores
 *.swp
 Thumbs.db
+# config local de dev (servidor de preview)
+.claude/

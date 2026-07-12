@@ -99,6 +99,8 @@ function initLevel() {
   surprise = null;
   jumpCount = 0;
   nextSurpriseAt = 4;
+  // trilha de fundo do mundo atual (crossfade só quando o mundo muda)
+  playWorldMusic(world);
   cancelAnimationFrame(animFrame);
   loop();
 }
@@ -167,7 +169,8 @@ const btnHard = document.getElementById('btnHard');
 function startGame(diff) {
   difficulty = diff;
   widthMul = (diff === 'hard') ? 0.55 : 1.0;  // hard = much narrower platforms
-  ac(); // unlock audio
+  ac();          // unlock audio (efeitos)
+  unlockMusic(); // destrava as faixas de fundo dentro deste gesto (iOS)
   titleEl.classList.add('fade-out');          // smooth fade
   setTimeout(() => {
     titleEl.style.display = 'none';
