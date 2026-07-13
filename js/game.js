@@ -116,6 +116,7 @@ function winLevel() {
   const s = starsFor(missed);
   const starKey = `${world}-${sub}`;
   stars[starKey] = Math.max(stars[starKey]||0, s);
+  saveProgress(); // persiste a melhor pontuação de estrelas
   if (isHard) {
     // ate the chili: spicy fire particles + extra spin
     goat.spinning = true; goat.angle = 0;
@@ -147,6 +148,8 @@ function advanceLevel() {
     sub = 1;
     world = (world + 1) % WORLDS.length; // loop worlds infinitely
   }
+  savedProgress[difficulty] = { world, sub }; // lembra onde o jogador está
+  saveProgress();
   initLevel();
 }
 
@@ -175,7 +178,9 @@ function startGame(diff) {
   setTimeout(() => {
     titleEl.style.display = 'none';
     started = true;
-    world = 0; sub = 1;
+    // retoma o progresso salvo desta dificuldade (ou começa do início)
+    const p = savedProgress[diff] || { world: 0, sub: 1 };
+    world = p.world; sub = p.sub;
     initLevel();
   }, 500); // matches the CSS transition
 }
@@ -183,7 +188,66 @@ function startGame(diff) {
 btnEasy.addEventListener('click', () => startGame('easy'));
 btnHard.addEventListener('click', () => startGame('hard'));
 
+// ---------- Persistência de progresso (localStorage) ----------
+// Guarda a melhor pontuação de estrelas por subfase e a posição atual em cada
+// dificuldade, para o jogador retomar de onde parou ao reabrir o app.
+const SAVE_KEY = 'belaClimb.save.v1';
+let savedProgress = { easy: { world: 0, sub: 1 }, hard: { world: 0, sub: 1 } };
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.stars) Object.assign(stars, d.stars);
+    if (d.progress) savedProgress = Object.assign(savedProgress, d.progress);
+  } catch (e) { /* storage indisponível/corrompido: começa do zero */ }
+}
+function saveProgress() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ stars, progress: savedProgress }));
+  } catch (e) { /* storage cheio/bloqueado: ignora, o jogo segue */ }
+}
+
+// ---------- Escala responsiva + safe-areas (notch / Dynamic Island) ----------
+// Mantém os 420x680 internos e escala o wrapper para caber na tela útil (menos
+// as safe-areas), centralizando dentro dela. O transform é transparente ao
+// getBoundingClientRect do canvas, então o toque (input.js) continua alinhado.
+function fitGame() {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  if (!vw || !vh) return;              // layout ainda não pronto: o resize corrige depois
+  const cs = getComputedStyle(document.documentElement);
+  const px = v => parseFloat(cs.getPropertyValue(v)) || 0;
+  const t = px('--sat'), b = px('--sab'), l = px('--sal'), r = px('--sar');
+  const availW = vw - l - r;
+  const availH = vh - t - b;
+  const scale = Math.min(availW / 420, availH / 680, 1) || 1; // nunca 0
+  const root = document.documentElement.style;
+  root.setProperty('--game-scale', scale);
+  root.setProperty('--game-shift-x', ((l - r) / 2) + 'px'); // centraliza na área útil
+  root.setProperty('--game-shift-y', ((t - b) / 2) + 'px');
+}
+window.addEventListener('resize', fitGame);
+window.addEventListener('orientationchange', fitGame);
+
+// ---------- Pausa ao ir para segundo plano ----------
+// Sem isso, a música e os setTimeout de transição continuavam correndo com o app
+// minimizado, causando áudio fantasma e estados estranhos ao voltar.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    cancelAnimationFrame(animFrame);
+    setMusicMuted(true);                 // pausa a música de fundo
+    if (audioCtx) audioCtx.suspend();    // suspende os efeitos
+  } else {
+    if (audioCtx) audioCtx.resume();
+    if (soundOn) setMusicMuted(false);   // retoma a música (se o som estiver ligado)
+    if (started) { cancelAnimationFrame(animFrame); loop(); } // retoma o loop sem duplicar
+  }
+});
+
 // idle render behind title
+loadProgress();
+fitGame();
 initClouds();
 CUR = generateLevel(0, 1); // idle background level behind the title
 goat = {x:210,y:400,vx:0,vy:0,onGround:true,face:'happy',angle:0,spinning:false};

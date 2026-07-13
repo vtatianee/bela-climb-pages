@@ -37,7 +37,7 @@ async function triggerHaptic(type = 'LIGHT') {
     try {
       if (type === 'HEAVY') await window.Capacitor.Plugins.Haptics.impact({ style: 'HEAVY' });
       else await window.Capacitor.Plugins.Haptics.impact({ style: 'LIGHT' });
-    } catch (e) { console.log(e); }
+    } catch (e) { /* Haptics indisponível (ex.: fora do app nativo): ignora */ }
   }
 }
 

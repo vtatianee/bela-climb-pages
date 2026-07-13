@@ -1,13 +1,46 @@
+  /* Fonte Fredoka servida localmente (offline, sem CDN). Fonte variável:
+     um arquivo por subset cobre toda a faixa de peso 300–700 usada no jogo.
+     'latin' cobre os acentos do português (U+0000–00FF). */
+  @font-face {
+    font-family: 'Fredoka'; font-style: normal; font-weight: 300 700;
+    font-display: swap; src: url('fonts/fredoka-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+      U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+      U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Fredoka'; font-style: normal; font-weight: 300 700;
+    font-display: swap; src: url('fonts/fredoka-latinext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+      U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+      U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+  /* Insets da tela (notch / Dynamic Island / barra de gestos) expostos ao JS */
+  :root {
+    --sat: env(safe-area-inset-top);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+    --sar: env(safe-area-inset-right);
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: #1a0a00;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    height: 100vh; overflow: hidden;
+    min-height: 100vh; height: 100dvh; overflow: hidden;
     font-family: 'Georgia', serif;
     touch-action: none;
   }
-  #gameWrapper { position: relative; width: 420px; height: 680px; }
+  /* 420x680 internos fixos; escala e deslocamento (safe-area) calculados no JS
+     (fitGame). transform é transparente ao getBoundingClientRect do canvas, então
+     o mapeamento de toque em input.js continua correto. */
+  #gameWrapper {
+    position: relative; width: 420px; height: 680px;
+    transform: translate(var(--game-shift-x, 0), var(--game-shift-y, 0))
+               scale(var(--game-scale, 1));
+    transform-origin: center center;
+  }
   canvas {
     border-radius: 16px;
     box-shadow: 0 0 60px rgba(255,160,60,0.3);
@@ -167,4 +200,22 @@
     0%   { transform: scale(1)   rotate(0deg);   opacity: 1; }
     60%  { transform: scale(1.6) rotate(360deg); opacity: 1; }
     100% { transform: scale(0)   rotate(540deg); opacity: 0; }
+  }
+
+  /* ----- Aviso de orientação (o jogo é retrato) ----- */
+  /* Só em telas baixas (celular deitado); iPad em paisagem tem altura grande e não dispara. */
+  #rotateNotice {
+    display: none;
+    position: fixed; inset: 0; z-index: 9999;
+    background: #1a0a00; color: #ffe0a0;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 24px;
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+  }
+  #rotateNotice .rotate-emoji { font-size: 56px; margin-bottom: 16px; animation: rotateHint 1.8s ease-in-out infinite; }
+  #rotateNotice .rotate-text { font-size: 18px; line-height: 1.5; max-width: 280px; }
+  @keyframes rotateHint { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(78deg); } }
+  @media (orientation: landscape) and (max-height: 500px) {
+    #gameWrapper { display: none; }
+    #rotateNotice { display: flex; }
   }

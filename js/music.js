@@ -47,7 +47,7 @@ function initMusic() {
   musicEls = MUSIC_TRACKS.map(src => {
     const a = new Audio(src);
     a.loop = true;
-    a.preload = 'auto';
+    a.preload = 'none';   // só carrega quando destravada/tocada (economiza banda)
     a.volume = 0;
     // arquivo ausente/inválido: silêncio, o jogo segue sem quebrar
     a.addEventListener('error', () => {});
