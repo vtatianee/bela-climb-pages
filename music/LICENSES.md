@@ -27,14 +27,21 @@ nova, que é o uso permitido pela licença.
 
 | Arquivo      | Título                      | Autor (Pixabay) | ID     | Fonte (URL)                                                                         | Licença                 | Atribuição  |
 |--------------|-----------------------------|-----------------|--------|-------------------------------------------------------------------------------------|-------------------------|-------------|
-| floresta.mp3 | Forest Path                 | vitmatnotes     | 212664 | https://pixabay.com/music/happy-childrens-tunes-forest-path-212664/                 | Pixabay Content License | Não exigida |
-| rio.mp3      | Kids                        | the_mountain    | 513158 | https://pixabay.com/music/happy-childrens-tunes-kids-513158/                        | Pixabay Content License | Não exigida |
-| lago.mp3     | Happy Cute Kids             | mondamusic      | 560127 | https://pixabay.com/music/happy-childrens-tunes-happy-cute-kids-560127/             | Pixabay Content License | Não exigida |
-| vulcao.mp3   | Powerful Percussion         | energysound     | 513717 | https://pixabay.com/music/beats-powerful-percussion-513717/                         | Pixabay Content License | Não exigida |
-| neve.mp3     | Happy Kids Background Music | bombinsound     | 499554 | https://pixabay.com/music/happy-childrens-tunes-happy-kids-background-music-499554/ | Pixabay Content License | Não exigida |
+| floresta.m4a | Forest Path                 | vitmatnotes     | 212664 | https://pixabay.com/music/happy-childrens-tunes-forest-path-212664/                 | Pixabay Content License | Não exigida |
+| rio.m4a      | Kids                        | the_mountain    | 513158 | https://pixabay.com/music/happy-childrens-tunes-kids-513158/                        | Pixabay Content License | Não exigida |
+| lago.m4a     | Happy Cute Kids             | mondamusic      | 560127 | https://pixabay.com/music/happy-childrens-tunes-happy-cute-kids-560127/             | Pixabay Content License | Não exigida |
+| vulcao.m4a   | Powerful Percussion         | energysound     | 513717 | https://pixabay.com/music/beats-powerful-percussion-513717/                         | Pixabay Content License | Não exigida |
+| neve.m4a     | Happy Kids Background Music | bombinsound     | 499554 | https://pixabay.com/music/happy-childrens-tunes-happy-kids-background-music-499554/ | Pixabay Content License | Não exigida |
 
 Os IDs conferem com as URLs de origem, e os autores vieram no nome do arquivo
-baixado do Pixabay. Arquivos originais preservados em `~/Downloads`.
+baixado do Pixabay.
+
+**Formato:** os MP3 originais (256 kbps, 15 MB no total) foram reencodados para
+**AAC 96 kbps (.m4a)** com `afconvert`, caindo para ~6,3 MB — codec nativo do iOS,
+sem diferença audível como trilha de fundo. A licença do Pixabay permite
+explicitamente adaptar/modificar o conteúdo. Os MP3 originais estão preservados em
+`~/Downloads` (e no histórico do git, commit `4a1db2e`), caso seja preciso
+reencodar a partir da fonte de maior qualidade.
 
 ### Fontes recomendadas (seguras para App Store)
 - **Pixabay Music** (pixabay.com/music) — Pixabay Content License: uso comercial

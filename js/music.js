@@ -27,12 +27,14 @@
 
 // Trilha de cada mundo — a ORDEM segue WORLDS em levels.js
 // (0 Floresta, 1 Rio, 2 Lago, 3 Vulcão, 4 Neve).
+// Formato: AAC (.m4a) a 96 kbps — codec nativo do iOS, ~57% menor que os MP3
+// originais de 256 kbps, sem diferença audível como trilha de fundo em loop.
 const MUSIC_TRACKS = [
-  'music/floresta.mp3', // Mundo 1 — Floresta
-  'music/rio.mp3',      // Mundo 2 — Rio
-  'music/lago.mp3',     // Mundo 3 — Lago
-  'music/vulcao.mp3',   // Mundo 4 — Vulcão
-  'music/neve.mp3',     // Mundo 5 — Neve
+  'music/floresta.m4a', // Mundo 1 — Floresta
+  'music/rio.m4a',      // Mundo 2 — Rio
+  'music/lago.m4a',     // Mundo 3 — Lago
+  'music/vulcao.m4a',   // Mundo 4 — Vulcão
+  'music/neve.m4a',     // Mundo 5 — Neve
 ];
 
 const MUSIC_VOLUME = 0.35;   // volume alvo da música (fica ABAIXO dos efeitos)
