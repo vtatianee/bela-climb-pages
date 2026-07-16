@@ -16,6 +16,8 @@
  *   lvlBadge           : texto do mundo/fase no HUD (#lvlText)
  *   tryBadge           : texto de vidas no HUD (#tryText)
  *   soundBtn           : botão de som (#soundBtn) — usado por audio.js
+ *   wrapperEl          : container do jogo (#gameWrapper); recebe a classe
+ *                        'playing' para mostrar o HUD só durante a partida
  *   titleEl            : tela de título/seleção (#title)
  *   capimEl            : elemento do objetivo, Capim/Pimenta (#superCapim)
  *
@@ -76,6 +78,7 @@ const btnNext  = document.getElementById('btnNext');
 const lvlBadge = document.getElementById('lvlText');
 const tryBadge = document.getElementById('tryText');
 const soundBtn = document.getElementById('soundBtn');
+const wrapperEl = document.getElementById('gameWrapper');
 const titleEl  = document.getElementById('title');
 const capimEl  = document.getElementById('superCapim');
 

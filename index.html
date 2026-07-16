@@ -9,8 +9,13 @@
 
 <!-- Fonte Fredoka servida localmente (css/fonts/*.woff2) — 100% offline, sem CDN -->
 
-<!-- Folha de estilo separada -->
-<link rel="stylesheet" href="css/style.css">
+<!--
+  Folha de estilo separada.
+  ?v=N força o navegador a buscar a versão nova em vez de servir cache antigo.
+  IMPORTANTE: incremente o N (aqui e nos <script> abaixo) a cada publicação que
+  mude CSS/JS, senão o jogador pode continuar vendo a versão anterior.
+-->
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 <div id="gameWrapper">
@@ -55,14 +60,14 @@
   config.js declara o estado global; os módulos seguintes o utilizam;
   game.js orquestra tudo e inicia o jogo por último.
 -->
-<script src="js/config.js"></script>
-<script src="js/audio.js"></script>
-<script src="js/music.js"></script>
-<script src="js/levels.js"></script>
-<script src="js/physics.js"></script>
-<script src="js/hazards.js"></script>
-<script src="js/render.js"></script>
-<script src="js/input.js"></script>
-<script src="js/game.js"></script>
+<script src="js/config.js?v=8"></script>
+<script src="js/audio.js?v=8"></script>
+<script src="js/music.js?v=8"></script>
+<script src="js/levels.js?v=8"></script>
+<script src="js/physics.js?v=8"></script>
+<script src="js/hazards.js?v=8"></script>
+<script src="js/render.js?v=8"></script>
+<script src="js/input.js?v=8"></script>
+<script src="js/game.js?v=8"></script>
 </body>
 </html>

@@ -177,6 +177,7 @@ function startGame(diff) {
   titleEl.classList.add('fade-out');          // smooth fade
   setTimeout(() => {
     titleEl.style.display = 'none';
+    wrapperEl.classList.add('playing');  // revela o HUD (escondido na tela inicial)
     started = true; paused = false;
     // retoma o progresso salvo desta dificuldade (ou começa do início)
     const p = savedProgress[diff] || { world: 0, sub: 1 };
@@ -224,6 +225,7 @@ function backToTitle() {
   pauseMenu.classList.remove('show');
   cancelAnimationFrame(animFrame);
   started = false;
+  wrapperEl.classList.remove('playing'); // esconde o HUD atrás do título translúcido
   setMusicMuted(true);
   if (audioCtx) audioCtx.resume();      // o próximo toque precisa do contexto vivo
   capimEl.style.display = 'none';
@@ -231,7 +233,7 @@ function backToTitle() {
   hideMsg();
   titleEl.classList.remove('fade-out');
   titleEl.style.display = 'flex';
-  render();                             // um frame estático atrás do título
+  loop();                               // mantém a cena viva (nuvens) atrás do título
 }
 
 pauseBtn.addEventListener('click', pauseGame);
@@ -299,14 +301,19 @@ document.addEventListener('visibilitychange', () => {
     if (paused) return;                  // menu de pausa aberto: continua parado
     if (audioCtx) audioCtx.resume();
     if (soundOn) setMusicMuted(false);   // retoma a música (se o som estiver ligado)
-    if (started) { cancelAnimationFrame(animFrame); loop(); } // retoma o loop sem duplicar
+    // retoma o loop sem duplicar — também no título, onde a cena segue animada
+    cancelAnimationFrame(animFrame); loop();
   }
 });
 
-// idle render behind title
+// ---------- Cena viva atrás do título ----------
+// O loop roda mesmo antes de started=true: as nuvens andam (updateAndDrawClouds)
+// e o título é semitransparente, então a tela inicial fica animada sem nenhum
+// arquivo de imagem/vídeo. É seguro rodar aqui: updateSurprise/updateHazards são
+// guardados por `started`, e stepPhysics sai cedo com a cabra parada no chão.
 loadProgress();
 fitGame();
 initClouds();
-CUR = generateLevel(0, 1); // idle background level behind the title
-goat = {x:210,y:400,vx:0,vy:0,onGround:true,face:'happy',angle:0,spinning:false};
-render();
+CUR = generateLevel(0, 1); // cena de fundo do título
+goat = {x:210,y:400,vx:0,vy:0,onGround:true,face:'happy',angle:0,spinning:false,plat:0};
+loop();

@@ -46,9 +46,16 @@
     box-shadow: 0 0 60px rgba(255,160,60,0.3);
     display: block;
   }
+  /* HUD (badges, som, pausa) só aparece durante a partida. Antes o #title opaco
+     os cobria; agora que ele é translúcido, eles vazariam através dele. */
+  #ui, #soundBtn, #pauseBtn { display: none; }
+  #gameWrapper.playing #ui,
+  #gameWrapper.playing #soundBtn,
+  #gameWrapper.playing #pauseBtn { display: flex; }
+
   #ui {
     position: absolute; top: 14px; left: 0; right: 0;
-    display: flex; justify-content: space-between; align-items: center;
+    justify-content: space-between; align-items: center;
     padding: 0 16px; pointer-events: none;
   }
   .badge {
@@ -71,7 +78,7 @@
     background: linear-gradient(180deg, #5c4222, #4a3319);
     border: 2.5px solid #2e2010;
     color: #fff; font-size: 22px; cursor: pointer; pointer-events: auto;
-    display: flex; align-items: center; justify-content: center;
+    align-items: center; justify-content: center; /* display vem de .playing */
     box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 6px 10px rgba(0,0,0,0.30),
                 inset 0 1.5px 0 rgba(255,255,255,0.18);
     transition: transform 0.08s;
@@ -87,7 +94,7 @@
     background: linear-gradient(180deg, #5c4222, #4a3319);
     border: 2.5px solid #2e2010;
     color: #fff; font-size: 17px; cursor: pointer; pointer-events: auto;
-    display: flex; align-items: center; justify-content: center;
+    align-items: center; justify-content: center; /* display vem de .playing */
     box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 6px 10px rgba(0,0,0,0.30),
                 inset 0 1.5px 0 rgba(255,255,255,0.18);
     transition: transform 0.08s;
@@ -151,9 +158,14 @@
   #btnNext:hover { filter: brightness(1.06); }
   #btnNext:active { transform: translateX(-50%) translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
   /* Title screen */
+  /* Véu semitransparente: deixa a cena viva do jogo (nuvens à deriva, bioma,
+     montanhas) aparecer atrás do título, mantendo contraste para o texto.
+     O desfoque joga o cenário para o fundo e evita competir com os botões. */
   #title {
     position: absolute; inset: 0; border-radius: 16px;
-    background: linear-gradient(160deg, #2a4d6e, #1a2d3e);
+    background: linear-gradient(160deg, rgba(42, 77, 110, 0.78), rgba(26, 45, 62, 0.88));
+    -webkit-backdrop-filter: blur(3px) saturate(1.1);
+            backdrop-filter: blur(3px) saturate(1.1);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     z-index: 10;
     font-family: 'Fredoka', sans-serif;
