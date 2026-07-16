@@ -15,7 +15,7 @@
   IMPORTANTE: incremente o N (aqui e nos <script> abaixo) a cada publicação que
   mude CSS/JS, senão o jogador pode continuar vendo a versão anterior.
 -->
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 <div id="gameWrapper">
@@ -36,9 +36,33 @@
   <div id="pauseMenu">
     <div class="pauseCard">
       <h2>PAUSA</h2>
-      <button class="pauseAction resume" id="btnResume"><span class="emoji">▶️</span> Continuar</button>
-      <button class="pauseAction restart" id="btnRestart"><span class="emoji">↻</span> Reiniciar Fase</button>
-      <button class="pauseAction quit" id="btnQuit"><span class="emoji">🏠</span> Trocar Dificuldade</button>
+      <!-- Ícones em SVG inline: herdam a cor do texto do botão (currentColor),
+           mesmo peso de traço, nítidos em qualquer escala e sem arquivo algum. -->
+      <button class="pauseAction resume" id="btnResume">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.5 5.4 19 12 8.5 18.6Z" fill="currentColor" stroke="currentColor"
+                stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        Continuar
+      </button>
+      <button class="pauseAction restart" id="btnRestart">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+             stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        Reiniciar Fase
+      </button>
+      <button class="pauseAction quit" id="btnQuit">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+             stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"/>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+        Trocar Dificuldade
+      </button>
     </div>
   </div>
   <div id="title">
@@ -60,14 +84,14 @@
   config.js declara o estado global; os módulos seguintes o utilizam;
   game.js orquestra tudo e inicia o jogo por último.
 -->
-<script src="js/config.js?v=8"></script>
-<script src="js/audio.js?v=8"></script>
-<script src="js/music.js?v=8"></script>
-<script src="js/levels.js?v=8"></script>
-<script src="js/physics.js?v=8"></script>
-<script src="js/hazards.js?v=8"></script>
-<script src="js/render.js?v=8"></script>
-<script src="js/input.js?v=8"></script>
-<script src="js/game.js?v=8"></script>
+<script src="js/config.js?v=9"></script>
+<script src="js/audio.js?v=9"></script>
+<script src="js/music.js?v=9"></script>
+<script src="js/levels.js?v=9"></script>
+<script src="js/physics.js?v=9"></script>
+<script src="js/hazards.js?v=9"></script>
+<script src="js/render.js?v=9"></script>
+<script src="js/input.js?v=9"></script>
+<script src="js/game.js?v=9"></script>
 </body>
 </html>

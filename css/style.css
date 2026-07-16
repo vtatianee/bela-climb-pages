@@ -125,7 +125,13 @@
                 inset 0 2px 0 rgba(255,255,255,0.25);
     transition: transform 0.08s, filter 0.15s;
   }
-  .pauseAction .emoji { font-size: 19px; text-shadow: none; }
+  /* currentColor faz o ícone seguir a cor do texto de cada botão (branco nos
+     verde/azul, marrom no âmbar). O drop-shadow imita o text-shadow do rótulo,
+     mantendo o mesmo relevo. */
+  .pauseAction .ico {
+    width: 20px; height: 20px; flex: 0 0 auto;
+    filter: drop-shadow(0 2px 0 rgba(0,0,0,0.32));
+  }
   .pauseAction:hover { filter: brightness(1.08); }
   .pauseAction:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.3); }
   .pauseAction.resume  { background: linear-gradient(180deg, #6fae4a, #54822f); border-color: #3a5e1f; }
