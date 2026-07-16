@@ -63,9 +63,16 @@ function initMusic() {
 function unlockMusic() {
   initMusic();
   musicEls.forEach(a => {
+    // NÃO pausar a faixa que já virou a trilha ativa: o pause abaixo roda dentro
+    // de um .then() assíncrono e, se playWorldMusic() tiver começado nesse meio
+    // tempo, pausaríamos por cima a música que acabou de iniciar.
+    const stopIfNotPlaying = () => {
+      if (musicEls[musicWorld] === a) return; // é a trilha ativa: deixa tocando
+      a.pause(); a.currentTime = 0;
+    };
     const p = a.play();
-    if (p && p.then) p.then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
-    else { try { a.pause(); } catch (e) {} }
+    if (p && p.then) p.then(stopIfNotPlaying).catch(() => {});
+    else { try { stopIfNotPlaying(); } catch (e) {} }
   });
 }
 
