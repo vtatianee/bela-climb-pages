@@ -48,9 +48,21 @@ function triggerSurprise() {
   // TRAVA nessa posição até o fim da fase, a fase fica impossível (Bela presa).
   const REACH = 150;    // mesmo valor conservador usado em generateLevel()
   const MAX_DY = 120;   // ~1 passo vertical entre plataformas (span/(count-1) ≈ 96) + folga
+  const MIN_CORREDOR = GOAT_R * 2 + 8; // 44px: a Bela (36px) passa com folga
 
   const prev = ps[idx - 1]; // vizinha de baixo
   const next = ps[idx + 1]; // vizinha de cima
+
+  /**
+   * Largura da parte de `abaixo` que NÃO fica coberta por `acima` — é por onde a
+   * Bela sobe. Se isso encolher além da largura dela, ela fica presa embaixo de
+   * uma "tampa" (a plataforma-surpresa trava na posição até o fim da fase).
+   */
+  function corredorLivre(abaixo, acima) {
+    const esq = Math.max(0, acima.x - abaixo.x);
+    const dir = Math.max(0, (abaixo.x + abaixo.w) - (acima.x + acima.w));
+    return Math.max(esq, dir);
+  }
 
   // Verifica se, com o novo (toX,toY), os saltos vizinho->idx e idx->vizinho
   // continuam dentro do alcance real. Usa a MESMA folga da geração: (w+wViz)*0.25.
@@ -61,7 +73,14 @@ function triggerSurprise() {
     const nextCx = next.x + next.w / 2;
     const okPrev = Math.abs(cx - prevCx) <= REACH + (p.w + prev.w) * 0.25 && Math.abs(prev.y - toY) <= MAX_DY;
     const okNext = Math.abs(nextCx - cx) <= REACH + (p.w + next.w) * 0.25 && Math.abs(toY - next.y) <= MAX_DY;
-    return okPrev && okNext;
+    if (!okPrev || !okNext) return false;
+    // Alcance não basta: a passagem precisa continuar aberta nos DOIS sentidos —
+    // a Bela tem de conseguir sair da vizinha de baixo e também da própria movida.
+    // Sem isto, ~21% dos movimentos deixavam um corredor menor que a Bela.
+    const movida = { x: toX, y: toY, w: p.w };
+    if (corredorLivre(prev, movida) < MIN_CORREDOR) return false;
+    if (corredorLivre(movida, next) < MIN_CORREDOR) return false;
+    return true;
   }
 
   // Candidatos de deslocamento (embaralhados), testados até achar um que mantém a fase jogável.
