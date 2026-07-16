@@ -177,7 +177,7 @@ function startGame(diff) {
   titleEl.classList.add('fade-out');          // smooth fade
   setTimeout(() => {
     titleEl.style.display = 'none';
-    started = true;
+    started = true; paused = false;
     // retoma o progresso salvo desta dificuldade (ou começa do início)
     const p = savedProgress[diff] || { world: 0, sub: 1 };
     world = p.world; sub = p.sub;
@@ -187,6 +187,63 @@ function startGame(diff) {
 
 btnEasy.addEventListener('click', () => startGame('easy'));
 btnHard.addEventListener('click', () => startGame('hard'));
+
+// ---------- Menu de pausa ----------
+// Rede de segurança: o jogador pode reiniciar a fase ou trocar de dificuldade a
+// qualquer momento, sem precisar perder todas as vidas para isso.
+const pauseBtn   = document.getElementById('pauseBtn');
+const pauseMenu  = document.getElementById('pauseMenu');
+const btnResume  = document.getElementById('btnResume');
+const btnRestart = document.getElementById('btnRestart');
+const btnQuit    = document.getElementById('btnQuit');
+
+function pauseGame() {
+  if (!started || paused) return;
+  paused = true;
+  cancelAnimationFrame(animFrame);      // congela física, perigos e render
+  setMusicMuted(true);
+  // Não adianta suspender o audioCtx aqui: o unlockAudio de audio.js escuta
+  // 'click' no window e o resumiria no mesmo clique. Com o loop parado nenhum
+  // efeito é disparado, então o contexto ocioso é inofensivo.
+  pauseMenu.classList.add('show');
+}
+
+function resumeGame() {
+  if (!paused) return;
+  paused = false;
+  pauseMenu.classList.remove('show');
+  if (audioCtx) audioCtx.resume();
+  if (soundOn) setMusicMuted(false);
+  cancelAnimationFrame(animFrame);      // evita dois loops simultâneos
+  loop();
+}
+
+/** Volta à tela de título para escolher a dificuldade de novo. */
+function backToTitle() {
+  paused = false;
+  pauseMenu.classList.remove('show');
+  cancelAnimationFrame(animFrame);
+  started = false;
+  setMusicMuted(true);
+  if (audioCtx) audioCtx.resume();      // o próximo toque precisa do contexto vivo
+  capimEl.style.display = 'none';
+  btnNext.style.display = 'none';
+  hideMsg();
+  titleEl.classList.remove('fade-out');
+  titleEl.style.display = 'flex';
+  render();                             // um frame estático atrás do título
+}
+
+pauseBtn.addEventListener('click', pauseGame);
+btnResume.addEventListener('click', resumeGame);
+btnRestart.addEventListener('click', () => {
+  paused = false;
+  pauseMenu.classList.remove('show');
+  if (audioCtx) audioCtx.resume();
+  if (soundOn) setMusicMuted(false);
+  initLevel();                          // devolve as 5 vidas e remonta a fase
+});
+btnQuit.addEventListener('click', backToTitle);
 
 // ---------- Persistência de progresso (localStorage) ----------
 // Guarda a melhor pontuação de estrelas por subfase e a posição atual em cada
@@ -239,6 +296,7 @@ document.addEventListener('visibilitychange', () => {
     setMusicMuted(true);                 // pausa a música de fundo
     if (audioCtx) audioCtx.suspend();    // suspende os efeitos
   } else {
+    if (paused) return;                  // menu de pausa aberto: continua parado
     if (audioCtx) audioCtx.resume();
     if (soundOn) setMusicMuted(false);   // retoma a música (se o som estiver ligado)
     if (started) { cancelAnimationFrame(animFrame); loop(); } // retoma o loop sem duplicar

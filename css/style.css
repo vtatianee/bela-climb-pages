@@ -77,6 +77,54 @@
     transition: transform 0.08s;
   }
   #soundBtn:active { transform: translateX(-50%) translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.30); }
+  /* ----- Botão de pausa (abaixo do badge de vidas, canto superior direito) ----- */
+  /* Fica coberto pelo #title (inset:0, z-index:10) na tela inicial, então não
+     precisa de lógica de mostrar/esconder. */
+  #pauseBtn {
+    position: absolute; top: 72px; right: 16px;
+    font-family: 'Fredoka', sans-serif;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(180deg, #5c4222, #4a3319);
+    border: 2.5px solid #2e2010;
+    color: #fff; font-size: 17px; cursor: pointer; pointer-events: auto;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 6px 10px rgba(0,0,0,0.30),
+                inset 0 1.5px 0 rgba(255,255,255,0.18);
+    transition: transform 0.08s;
+  }
+  #pauseBtn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.30); }
+
+  /* ----- Menu de pausa ----- */
+  #pauseMenu {
+    position: absolute; inset: 0; z-index: 20; border-radius: 16px;
+    background: rgba(12, 24, 34, 0.86);
+    display: none; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+  }
+  #pauseMenu.show { display: flex; }
+  .pauseCard { display: flex; flex-direction: column; align-items: center; }
+  .pauseCard h2 {
+    color: #ffe0a0; font-size: 34px; font-weight: 700; letter-spacing: 4px;
+    margin-bottom: 24px;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5);
+  }
+  .pauseAction {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    width: 240px; margin: 7px 0; padding: 13px 18px;
+    border-radius: 24px; border: 3px solid; font-size: 17px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,0.4);
+    box-shadow: 0 5px 0 rgba(0,0,0,0.3), 0 8px 14px rgba(0,0,0,0.32),
+                inset 0 2px 0 rgba(255,255,255,0.25);
+    transition: transform 0.08s, filter 0.15s;
+  }
+  .pauseAction .emoji { font-size: 19px; text-shadow: none; }
+  .pauseAction:hover { filter: brightness(1.08); }
+  .pauseAction:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.3); }
+  .pauseAction.resume  { background: linear-gradient(180deg, #6fae4a, #54822f); border-color: #3a5e1f; }
+  .pauseAction.restart { background: linear-gradient(180deg, #f0b84a, #d4872a); border-color: #9a5e1c; color: #4a2c08; text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
+  .pauseAction.quit    { background: linear-gradient(180deg, #5c7a92, #3f5a6e); border-color: #2e4354; }
+
   #message {
     position: absolute; bottom: 78px; left: 50%; transform: translateX(-50%);
     font-family: 'Fredoka', sans-serif; font-weight: 600;

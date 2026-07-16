@@ -43,6 +43,7 @@
  *   particles          : partículas ativas (poeira, fogo, confete, arco-íris)
  *   obstacle           : obstáculo sólido na primeira plataforma
  *   started            : true depois que o jogador escolhe a dificuldade
+ *   paused             : true enquanto o menu de pausa está aberto
  *   difficulty         : 'easy' (Cabra Mansa) | 'hard' (Cabra da Peste)
  *   widthMul           : multiplicador de largura das plataformas (dificuldade)
  *
@@ -95,6 +96,7 @@ let tries, maxTries;
 let goat, drag, won, lost, animFrame, particles = [];
 let obstacle = null;        // obstáculo sólido na primeira plataforma
 let started = false;        // true após escolher a dificuldade
+let paused = false;         // true enquanto o menu de pausa está aberto
 let difficulty = 'easy';    // 'easy' (Cabra Mansa) | 'hard' (Cabra da Peste)
 let widthMul = 1.0;         // multiplicador de largura das plataformas
 
