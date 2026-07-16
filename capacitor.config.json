@@ -1,0 +1,10 @@
+{
+  "appId": "com.vtatianee.belaclimb",
+  "appName": "Bela Climb",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#1a0a00",
+    "scrollEnabled": false
+  }
+}

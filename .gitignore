@@ -5,3 +5,17 @@
 Thumbs.db
 # config local de dev (servidor de preview)
 .claude/
+
+# Node / Capacitor
+node_modules/
+# www/ é GERADA por `npm run build` (espelho da raiz); a raiz é a fonte da verdade
+www/
+
+# artefatos de build do iOS (o projeto ios/ em si É versionado).
+# O Capacitor 8 usa Swift Package Manager, não CocoaPods — não há Pods/.
+ios/App/build/
+# public/ é copiada de www/ pelo `cap sync`; gerada, não versionada
+ios/App/App/public/
+DerivedData/
+*.xcuserstate
+xcuserdata/
