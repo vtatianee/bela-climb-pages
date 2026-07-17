@@ -6,7 +6,7 @@ Campos prontos para colar no **App Store Connect**. O app será publicado em
 - **Idioma primário:** Portuguese (Brazil)
 - **Idioma adicional:** English (U.S.) — cobre EUA e Canadá
 - **Privacy Policy URL:** https://vtatianee.github.io/bela-climb-pages/privacy.html
-- **Support URL:** _(obrigatória — ver seção no fim)_
+- **Support URL:** https://vtatianee.github.io/bela-climb-pages/support.html
 - **Marketing URL (opcional):** https://vtatianee.github.io/bela-climb-pages/
 - **Copyright:** © 2026 Vanessa Tatiane Evangelista Assink
 - **Categoria primária:** Games → Arcade
@@ -86,13 +86,5 @@ No questionário do App Store Connect, responda conforme o conteúdo real do jog
 
 → Resultado esperado: **4+** ou **9+**. Nada que bloqueie a publicação.
 
-## Support URL (obrigatória)
-
-O App Store Connect exige uma URL de suporte com como entrar em contato. Opções:
-1. Criar uma página simples `support.html` no GitHub Pages (posso fazer), ou
-2. Usar um link de contato que você já tenha.
-
 ## Pendências para você confirmar
-- **E-mail de contato:** usei `ar.assink@gmail.com` na política e no suporte. Confirmar
-  se é esse mesmo (a conta Developer é da Vanessa; o e-mail de contato pode ser qualquer um).
 - **Nome de exibição:** manter `Bela Climb` nos dois países? (cabe nos 30 caracteres).
