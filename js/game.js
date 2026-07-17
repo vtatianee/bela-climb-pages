@@ -323,3 +323,15 @@ initClouds();
 CUR = generateLevel(0, 1); // cena de fundo do título
 goat = {x:210,y:400,vx:0,vy:0,onGround:true,face:'happy',angle:0,spinning:false,plat:0};
 loop();
+
+// ---------- Splash nativa (Capacitor) ----------
+// Esconde a splash assim que a cena do título já está desenhada. Sem isto ela só
+// some no timeout padrão do plugin, prendendo o jogador numa tela estática (era o
+// aviso "SplashScreen was automatically hidden after default timeout" no console).
+// Fora do app nativo (navegador) o plugin não existe e a chamada é ignorada.
+if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
+  try {
+    const p = window.Capacitor.Plugins.SplashScreen.hide();
+    if (p && p.catch) p.catch(() => {});
+  } catch (e) { /* splash indisponível: o jogo segue normalmente */ }
+}

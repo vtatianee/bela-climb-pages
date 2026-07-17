@@ -6,5 +6,13 @@
     "contentInset": "never",
     "backgroundColor": "#1a0a00",
     "scrollEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2500,
+      "launchFadeOutDuration": 250,
+      "backgroundColor": "#1a0a00",
+      "showSpinner": false
+    }
   }
 }
