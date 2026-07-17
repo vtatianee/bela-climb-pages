@@ -72,7 +72,19 @@
 // ---------- Referências ao DOM / Canvas ----------
 const canvas  = document.getElementById('c');
 const ctx     = canvas.getContext('2d');
+// W/H continuam sendo as dimensões LÓGICAS (420x680) que todo o jogo usa.
 const W = canvas.width, H = canvas.height;
+
+// --- Renderização nítida em telas Retina (Hi-DPI) ---
+// O backing store passa a ter DPR× a resolução lógica; o CSS mantém o canvas em
+// 420x680 pt (o #gameWrapper escala isso). O contexto é escalado por DPR no
+// início de cada frame (render.js), então o jogo desenha em coordenadas lógicas
+// e sai nítido. Limitado a 3x (iPhones são 2x/3x) por custo/benefício.
+const DPR = Math.min(window.devicePixelRatio || 1, 3);
+canvas.width  = W * DPR;
+canvas.height = H * DPR;
+canvas.style.width  = W + 'px';
+canvas.style.height = H + 'px';
 const msgEl    = document.getElementById('message');
 const btnNext  = document.getElementById('btnNext');
 const lvlBadge = document.getElementById('lvlText');

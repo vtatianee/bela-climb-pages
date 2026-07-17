@@ -486,6 +486,9 @@ function drawObstacle() {
 }
 
 function render() {
+  // reancora a escala Hi-DPI a cada frame: desenhar em coordenadas lógicas
+  // (420x680) num backing store DPR× maior, sem depender do estado anterior.
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   ctx.clearRect(0,0,W,H);
   drawBg();
   if (!CUR.weird) updateAndDrawClouds();
