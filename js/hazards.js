@@ -101,7 +101,7 @@ function triggerSurprise() {
   if (toX === null) { surprise = { done: true }; return; }
 
   surprise = { idx, fromX: p.x, fromY: p.y, toX, toY, t: 0, dur: 26, done: false };
-  showMsg('⚠️ Uma pedra se mexeu!');
+  showMsg(t('rock_moved'));
   setTimeout(() => { if (!won && !lost) hideMsg(); }, 1500);
   beep(220, 0.18, 'sawtooth', 0.12, 140); // som grave de deslocamento
 }
@@ -197,7 +197,7 @@ function updateHazards() {
       goat.onGround = false; goat.jumping = true;
       goat.vy = 7; goat.vx += rk.vx * 2; goat.face = 'dizzy';
       sndFall();
-      loseTry("🪨 Pedra rolante!");
+      loseTry(t('rolling_rock'));
     }
   }
   rocks = rocks.filter(rk => rk.y < H + 30 && !rk.hit);
@@ -214,9 +214,9 @@ function updateHazards() {
         lost = true;
         goat.face = 'sad';
         sndFall();
-        showMsg("🐺 O Lobo Faminto pegou a Bela! Fim de jogo.");
+        showMsg(t('wolf_caught'));
         btnNext.style.display = 'block';
-        btnNext.textContent = '↻ Reiniciar Fase';
+        btnNext.textContent = t('restart_btn');
       }
     }
   }

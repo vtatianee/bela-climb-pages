@@ -52,6 +52,11 @@ function generateLevel(world, sub) {
   const tpl = WORLDS[world % WORLDS.length];
   const depth = world * SUBFASES_POR_MUNDO + (sub - 1); // profundidade acumulada
 
+  // Fase caótica surpresa: gravidade oscilante + vento lateral + arco-íris
+  // (physics.js e render.js já tratam a flag CUR.weird). Aparece ~1 a cada 7
+  // fases, nunca a primeira do mundo (sub 1) para não confundir logo de cara.
+  const weird = sub > 1 && Math.random() < 1 / 7;
+
   // Largura encolhe com a subfase (com um piso mínimo) — alavanca principal de dificuldade
   const baseW = 112, minW = 46;
   const platW = Math.max(minW, baseW - sub * 6);
@@ -100,7 +105,7 @@ function generateLevel(world, sub) {
   return {
     name: tpl.name, biome: tpl.biome, bg: tpl.bg, snow: tpl.snow,
     surface: tpl.surface, cloud: tpl.cloud, obstacle: tpl.obstacle,
-    world, sub, depth, platforms,
+    world, sub, depth, weird, platforms,
     // cópia original das posições/larguras — usada ao aplicar dificuldade,
     // reposicionar após a plataforma-surpresa e alinhar a oscilação do topo
     _orig: platforms.map(p => ({ x: p.x, y: p.y, w: p.w })),

@@ -35,7 +35,8 @@ Pull Bela back, aim, and release to fling her from platform to platform. Time ea
 FEATURES
 • Simple one-finger slingshot control — easy to learn, tricky to master
 • 5 biomes with endless, procedurally generated levels
-• Two difficulties: the gentle "Cabra Mansa" and the fierce "Cabra da Peste" — with crumbling platforms, rolling rocks, and the Hungry Wolf
+• Two difficulties: Gentle Goat and Wild Goat — with crumbling platforms, rolling rocks, and the Hungry Wolf
+• Surprise chaotic levels where gravity itself turns against you
 • Earn up to 3 stars on every level
 • 100% offline — no ads, no accounts, no data collected
 • Handcrafted art and sound, made with love
@@ -67,6 +68,7 @@ DESTAQUES
 • Controle de estilingue com um dedo — fácil de aprender, difícil de dominar
 • 5 biomas com fases geradas proceduralmente, infinitas
 • Duas dificuldades: a tranquila "Cabra Mansa" e a fera "Cabra da Peste" — com plataformas que desabam, pedras rolantes e o Lobo Faminto
+• Fases caóticas surpresa, onde a própria gravidade vira contra você
 • Ganhe até 3 estrelas em cada fase
 • 100% offline — sem anúncios, sem contas, sem coleta de dados
 • Arte e som feitos à mão, com carinho
@@ -98,6 +100,38 @@ conjunto para os slots menores, reescalando):
 4. `6.9-04-dificil.png` — modo Cabra da Peste (Pimenta + grama falsa)
 
 Barra de status "de vitrine" (9:41, bateria/sinal cheios) aplicada.
+
+## Screenshots (prontas)
+
+Capturadas do simulador iPhone 17 Pro Max em **1320×2868** (tamanho 6.9", o maior
+que a Apple exige). Barra de status limpa (9:41, bateria/sinal cheios).
+
+- `store/screenshots/pt-BR/` — título, gameplay e pausa em português (ficha do Brasil)
+- `store/screenshots/en-US/` — title, gameplay e paused em inglês (ficha de EUA/Canadá)
+
+O jogo detecta o idioma do aparelho automaticamente (`js/i18n.js`), então as duas
+fichas mostram o app no idioma do respectivo país.
+
+## Notas ao App Review (argumento contra a Guideline 4.2)
+
+Sugestão de texto para o campo "Notes" no envio:
+
+```
+Bela Climb is an original single-player arcade game, not a website wrapper.
+
+- Original slingshot physics engine written from scratch (no game engine).
+- All art is drawn programmatically on Canvas; all sound effects are synthesized
+  at runtime via the Web Audio API. No stock assets.
+- 5 distinct biomes with procedurally generated levels (endless), guaranteed
+  solvable by a reach constraint in the level generator.
+- Two difficulty modes. Hard mode adds crumbling platforms, rolling rocks
+  (from World 2) and a rising Hungry Wolf (from World 3).
+- Surprise "chaotic" levels with oscillating gravity and lateral wind.
+- Native iOS integration: Haptics feedback on impacts, AVAudioSession configured
+  for playback, portrait lock, safe-area aware layout.
+- Local progress persistence, pause menu, and automatic PT-BR/EN localization.
+- Runs 100% offline. No accounts, no ads, no analytics, no data collected.
+```
 
 ## Pendências para você confirmar
 - **Nome de exibição:** manter `Bela Climb` nos dois países? (cabe nos 30 caracteres).

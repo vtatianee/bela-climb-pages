@@ -30,7 +30,8 @@
  * ========================================================================== */
 
 // ---------- Mensagens de interface ----------
-function showMsg(t){ msgEl.textContent=t; msgEl.classList.add('show'); }
+// param nomeado 'msg' de propósito: 't' sombrearia a função global t() do i18n
+function showMsg(msg){ msgEl.textContent=msg; msgEl.classList.add('show'); }
 function hideMsg(){ msgEl.classList.remove('show'); }
 
 // ---------- Ciclo de fase ----------
@@ -85,7 +86,7 @@ function initLevel() {
   goat.safeX = goat.x; goat.safeY = goat.y; goat.jumping = false;
   drag = null; won = false; lost = false; particles = [];
   maxTries = START_TRIES; tries = START_TRIES;
-  lvlBadge.textContent = `Mundo ${world+1}-${sub}`;
+  lvlBadge.textContent = t('world_level', world+1, sub);
   document.querySelector('#lvlBadge .icon').textContent = '⛰️';
   tryBadge.textContent = `${tries}`;
   btnNext.style.display = 'none';
@@ -101,6 +102,11 @@ function initLevel() {
   nextSurpriseAt = 4;
   // trilha de fundo do mundo atual (crossfade só quando o mundo muda)
   playWorldMusic(world);
+  // fase caótica: avisa, senão a gravidade oscilante parece bug
+  if (CUR.weird) {
+    showMsg(t('chaotic'));
+    transitionTimers.push(setTimeout(() => { if (!won && !lost) hideMsg(); }, 2200));
+  }
   cancelAnimationFrame(animFrame);
   loop();
 }
@@ -125,10 +131,10 @@ function winLevel() {
       vx:(Math.random()-0.5)*7, vy:-Math.random()*6-1,
       life:34+Math.random()*16, fire:true
     });
-    showMsg(`🌶️ Que ardido! ${'⭐'.repeat(s)}${'☆'.repeat(3-s)}`);
+    showMsg(t('win_hard', `${'⭐'.repeat(s)}${'☆'.repeat(3-s)}`));
   } else {
     for (let i=0;i<14;i++) particles.push({ x:goat.x, y:goat.y, vx:(Math.random()-0.5)*6, vy:-Math.random()*5-2, life:40, gold:true });
-    showMsg(`🎉 Super Capim Sagrado! ${'⭐'.repeat(s)}${'☆'.repeat(3-s)}`);
+    showMsg(t('win_easy', `${'⭐'.repeat(s)}${'☆'.repeat(3-s)}`));
   }
   [0,1,2].forEach((i)=>{ if(i<s) setTimeout(sndStar, 600+i*200); });
   // breve transição, depois carrega a próxima subfase automaticamente.
@@ -136,7 +142,7 @@ function winLevel() {
   transitionTimers.push(setTimeout(() => {
     const nextSub = sub < SUBFASES_POR_MUNDO ? sub + 1 : 1;
     const nextWorld = sub < SUBFASES_POR_MUNDO ? world : (world + 1) % WORLDS.length;
-    showMsg(`Mundo ${nextWorld+1}-${nextSub} — Vamos lá!`);
+    showMsg(t('next_level', nextWorld+1, nextSub));
   }, 1100));
   transitionTimers.push(setTimeout(advanceLevel, 2100));
 }

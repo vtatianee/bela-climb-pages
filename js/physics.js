@@ -176,7 +176,7 @@ function landOnPlatform(pi) {
     // ERRO: pousou na mesma ou numa mais baixa — custa uma vida
     goat.plat = pi;
     goat.safeX = goat.x; goat.safeY = goat.y;
-    loseTry("🐐 Salto perdido! ↩");
+    loseTry(t('lost_jump'));
   }
 }
 
@@ -191,10 +191,10 @@ function loseTry(msg) {
   tryBadge.textContent = `${tries}`;
   if (tries <= 0) {
     lost = true;
-    showMsg("💀 Fim de jogo! Toque para reiniciar a fase.");
-    btnNext.style.display = 'block'; btnNext.textContent = '↻ Reiniciar Fase';
+    showMsg(t('game_over'));
+    btnNext.style.display = 'block'; btnNext.textContent = t('restart_btn');
   } else {
-    showMsg(`${msg}  (${tries} restantes)`);
+    showMsg(`${msg}  (${t('remaining', tries)})`);
     setTimeout(() => { if (!won && !lost) hideMsg(); }, 1300);
   }
 }
@@ -228,5 +228,5 @@ function fallLose() {
   goat.vx = 0; goat.vy = 0; goat.spinning = false; goat.angle = 0;
   goat.x = goat.safeX; goat.y = goat.safeY;
   goat.onGround = true; goat.face = 'happy';
-  loseTry("🐐 Bela caiu!");
+  loseTry(t('fell'));
 }

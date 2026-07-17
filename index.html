@@ -15,7 +15,7 @@
   IMPORTANTE: incremente o N (aqui e nos <script> abaixo) a cada publicação que
   mude CSS/JS, senão o jogador pode continuar vendo a versão anterior.
 -->
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
 <div id="gameWrapper">
@@ -35,15 +35,16 @@
   <div id="pauseBtn">⏸</div>
   <div id="pauseMenu">
     <div class="pauseCard">
-      <h2>PAUSA</h2>
+      <h2 data-i18n="pause_title">PAUSA</h2>
       <!-- Ícones em SVG inline: herdam a cor do texto do botão (currentColor),
-           mesmo peso de traço, nítidos em qualquer escala e sem arquivo algum. -->
+           mesmo peso de traço, nítidos em qualquer escala e sem arquivo algum.
+           O texto vai num <span data-i18n> para a tradução não apagar o SVG. -->
       <button class="pauseAction resume" id="btnResume">
         <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M8.5 5.4 19 12 8.5 18.6Z" fill="currentColor" stroke="currentColor"
                 stroke-width="3" stroke-linejoin="round"/>
         </svg>
-        Continuar
+        <span data-i18n="resume">Continuar</span>
       </button>
       <button class="pauseAction restart" id="btnRestart">
         <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
@@ -51,7 +52,7 @@
           <polyline points="23 4 23 10 17 10"/>
           <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
         </svg>
-        Reiniciar Fase
+        <span data-i18n="restart">Reiniciar Fase</span>
       </button>
       <button class="pauseAction quit" id="btnQuit">
         <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
@@ -61,22 +62,22 @@
           <polyline points="7 23 3 19 7 15"/>
           <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
         </svg>
-        Trocar Dificuldade
+        <span data-i18n="change_difficulty">Trocar Dificuldade</span>
       </button>
     </div>
   </div>
   <div id="title">
     <h1>BELA</h1>
     <div class="sub">C L I M B</div>
-    <div class="diffPrompt">Escolha a dificuldade</div>
-    <button class="diffBtn easy" id="btnEasy"><span class="emoji">🐑</span> Modo Cabra Mansa</button>
-    <button class="diffBtn hard" id="btnHard"><span class="emoji">⚡</span> Modo Cabra da Peste</button>
-    <div class="hint">Arraste a Bela para trás e solte para pular entre as plataformas. Desvie do obstáculo na base e suba os 5 biomas até o Super Capim Sagrado. Cada salto conta: errar custa uma vida 🐾 (até 5).</div>
+    <div class="diffPrompt" data-i18n="choose_difficulty">Escolha a dificuldade</div>
+    <button class="diffBtn easy" id="btnEasy"><span class="emoji">🐑</span> <span data-i18n="mode_easy">Modo Cabra Mansa</span></button>
+    <button class="diffBtn hard" id="btnHard"><span class="emoji">⚡</span> <span data-i18n="mode_hard">Modo Cabra da Peste</span></button>
+    <div class="hint" data-i18n="hint">Arraste a Bela para trás e solte para pular entre as plataformas. Desvie do obstáculo na base e suba os 5 biomas até o Super Capim Sagrado. Cada salto conta: errar custa uma vida 🐾 (até 5).</div>
   </div>
 </div>
 <div id="rotateNotice">
   <div class="rotate-emoji">📱</div>
-  <div class="rotate-text">Gire o celular na vertical para jogar 🐐</div>
+  <div class="rotate-text" data-i18n="rotate">Gire o celular na vertical para jogar 🐐</div>
 </div>
 
 <!--
@@ -84,14 +85,15 @@
   config.js declara o estado global; os módulos seguintes o utilizam;
   game.js orquestra tudo e inicia o jogo por último.
 -->
-<script src="js/config.js?v=9"></script>
-<script src="js/audio.js?v=9"></script>
-<script src="js/music.js?v=9"></script>
-<script src="js/levels.js?v=9"></script>
-<script src="js/physics.js?v=9"></script>
-<script src="js/hazards.js?v=9"></script>
-<script src="js/render.js?v=9"></script>
-<script src="js/input.js?v=9"></script>
-<script src="js/game.js?v=9"></script>
+<script src="js/config.js?v=10"></script>
+<script src="js/i18n.js?v=10"></script>
+<script src="js/audio.js?v=10"></script>
+<script src="js/music.js?v=10"></script>
+<script src="js/levels.js?v=10"></script>
+<script src="js/physics.js?v=10"></script>
+<script src="js/hazards.js?v=10"></script>
+<script src="js/render.js?v=10"></script>
+<script src="js/input.js?v=10"></script>
+<script src="js/game.js?v=10"></script>
 </body>
 </html>

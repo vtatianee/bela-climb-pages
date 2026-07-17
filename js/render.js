@@ -353,7 +353,7 @@ function drawDragLine() {
   ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.roundRect(bx,by,barW,barH,4); ctx.fill();
   ctx.fillStyle = pct<0.5?'#80e060':pct<0.8?'#ffd040':'#ff5020';
   ctx.beginPath(); ctx.roundRect(bx,by,barW*pct,barH,4); ctx.fill();
-  ctx.fillStyle='#ffd580'; ctx.font='11px sans-serif'; ctx.fillText('FORÇA',bx,by-4);
+  ctx.fillStyle='#ffd580'; ctx.font='11px sans-serif'; ctx.fillText(t('force'),bx,by-4);
 }
 
 function drawParticles() {
