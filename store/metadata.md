@@ -86,5 +86,18 @@ No questionário do App Store Connect, responda conforme o conteúdo real do jog
 
 → Resultado esperado: **4+** ou **9+**. Nada que bloqueie a publicação.
 
+## Screenshots
+
+Em `store/screenshots/` (capturados do simulador iPhone 17 Pro Max, **1320×2868**,
+tamanho de tela **6.9"** — o obrigatório na App Store; a Apple aceita este mesmo
+conjunto para os slots menores, reescalando):
+
+1. `6.9-01-titulo.png` — tela de título
+2. `6.9-02-gameplay.png` — gameplay (Mundo 1-1, Cabra Mansa)
+3. `6.9-03-pausa.png` — menu de pausa
+4. `6.9-04-dificil.png` — modo Cabra da Peste (Pimenta + grama falsa)
+
+Barra de status "de vitrine" (9:41, bateria/sinal cheios) aplicada.
+
 ## Pendências para você confirmar
 - **Nome de exibição:** manter `Bela Climb` nos dois países? (cabe nos 30 caracteres).
