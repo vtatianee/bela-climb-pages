@@ -11,6 +11,7 @@ Campos prontos para colar no **App Store Connect**. O app será publicado em
 - **Copyright:** © 2026 Vanessa Tatiane Evangelista Assink
 - **Categoria primária:** Games → Arcade
 - **Categoria secundária:** Games → Casual
+- **Preço do app:** **Grátis** (a venda é via compra no app — ver seção IAP abaixo)
 
 ---
 
@@ -133,3 +134,40 @@ Bela Climb is an original single-player arcade game, not a website wrapper.
 
 ## Pendências para você confirmar
 - **Nome de exibição:** manter `Bela Climb` nos dois países? (cabe nos 30 caracteres).
+
+## Compra no app (IAP) — desbloqueio do jogo completo
+
+Modelo: **app grátis** com Mundo 1-1 a 1-3 jogáveis; uma **compra única** libera
+o jogo inteiro. Implementado com StoreKit 2 nativo (plugin `BelaIAP`), sem SDKs de
+terceiros e sem coleta de dados.
+
+**Produto a criar no App Store Connect** (My Apps → Bela Climb → In-App Purchases):
+- **Tipo:** Non-Consumable (não-consumível)
+- **Product ID:** `com.vtatianee.belaclimb.fullunlock`  ← precisa ser EXATAMENTE este
+  (é o id em `js/iap.js` e no plugin nativo)
+- **Reference Name:** Full Game Unlock
+- **Preço:** faixa **US$ 2.99** (a Apple define o equivalente ~R$ 14,90 no Brasil)
+- **Localizações (nome de exibição / descrição):**
+  - pt-BR: "Jogo Completo" / "Desbloqueie os 5 biomas, fases infinitas, o modo
+    Cabra da Peste e as fases caóticas."
+  - en-US: "Full Game" / "Unlock all 5 biomes, endless levels, Wild Goat mode and
+    chaotic levels."
+- Screenshot de review do IAP: usar a tela do paywall (o App Store Connect pede uma).
+
+**Passos:**
+1. Em App Store Connect, definir o **preço do app como Free** (Pricing and Availability).
+2. Criar o IAP acima e submetê-lo **junto com a primeira versão do app** (IAPs novos
+   são revisados junto do binário na 1ª vez).
+3. O app já chama a StoreKit por esse Product ID — nada mais a mudar no código.
+
+**Testar a compra ANTES de enviar:**
+- *Local (simulador/Mac):* no Xcode, Product → Scheme → Edit Scheme → Run → Options →
+  **StoreKit Configuration** → selecionar `ios/App/BelaClimb.storekit`. Rodar, jogar
+  até a 4ª fase e comprar no diálogo de teste (não cobra nada). O `.storekit` é
+  ignorado em release/TestFlight.
+- *Sandbox (iPhone real):* criar um **Sandbox Tester** em App Store Connect → Users
+  and Access → Sandbox, e logar nele em Ajustes → App Store → Sandbox Account. A
+  compra usa o ambiente de teste (não cobra).
+
+**Botão "Restaurar compra":** já existe no paywall (a Apple exige para
+não-consumíveis) e chama `restore` → `AppStore.sync()`.
