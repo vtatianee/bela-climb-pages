@@ -1,0 +1,36 @@
+{
+  "identifier" : "B3LAC11M-B570-0R3K-1T00-000000000001",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "B3LAC11M-B570-0R3K-1T00-000000000002",
+      "localizations" : [
+        {
+          "description" : "Unlock all 5 biomes, endless levels, Wild Goat mode and chaotic levels.",
+          "displayName" : "Full Game",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Desbloqueie os 5 biomas, fases infinitas, o modo Cabra da Peste e as fases caóticas.",
+          "displayName" : "Jogo Completo",
+          "locale" : "pt_BR"
+        }
+      ],
+      "productID" : "com.vtatianee.belaclimb.fullunlock",
+      "referenceName" : "Full Game Unlock",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "0",
+    "_developerTeamID" : "LPMK593Q3G",
+    "_failTransactionsEnabled" : false
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 1,
+    "minor" : 0
+  }
+}

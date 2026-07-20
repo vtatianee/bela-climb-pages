@@ -99,7 +99,7 @@ async function restorePurchases() {
   const p = _nativeIAP();
   if (p && p.restore) {
     try {
-      const r = await p.restore();
+      const r = await p.restore({ productId: IAP_PRODUCT_ID });
       if (r && r.owned) { _setUnlocked(true); return { ok: true }; }
       return { ok: false, none: true };
     } catch (e) {
