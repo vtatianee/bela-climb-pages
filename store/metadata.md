@@ -88,29 +88,27 @@ No questionário do App Store Connect, responda conforme o conteúdo real do jog
 
 → Resultado esperado: **4+** ou **9+**. Nada que bloqueie a publicação.
 
-## Screenshots
-
-Em `store/screenshots/` (capturados do simulador iPhone 17 Pro Max, **1320×2868**,
-tamanho de tela **6.9"** — o obrigatório na App Store; a Apple aceita este mesmo
-conjunto para os slots menores, reescalando):
-
-1. `6.9-01-titulo.png` — tela de título
-2. `6.9-02-gameplay.png` — gameplay (Mundo 1-1, Cabra Mansa)
-3. `6.9-03-pausa.png` — menu de pausa
-4. `6.9-04-dificil.png` — modo Cabra da Peste (Pimenta + grama falsa)
-
-Barra de status "de vitrine" (9:41, bateria/sinal cheios) aplicada.
-
 ## Screenshots (prontas)
 
-Capturadas do simulador iPhone 17 Pro Max em **1320×2868** (tamanho 6.9", o maior
-que a Apple exige). Barra de status limpa (9:41, bateria/sinal cheios).
+Capturadas do simulador iPhone 17 Pro Max em **1320×2868** (tamanho **6.9"**, o
+maior que a Apple exige; ela reescala para os slots menores). Renderização Hi-DPI,
+barra de status "de vitrine" (9:41, bateria/sinal cheios). **4 telas por idioma**,
+cada ficha no idioma do respectivo país (o jogo detecta o locale via `js/i18n.js`):
 
-- `store/screenshots/pt-BR/` — título, gameplay e pausa em português (ficha do Brasil)
-- `store/screenshots/en-US/` — title, gameplay e paused em inglês (ficha de EUA/Canadá)
+**`store/screenshots/en-US/`** (ficha de EUA/Canadá):
+1. `1-title.png` — tela de título
+2. `2-gameplay.png` — gameplay (World 1-1, Gentle Goat)
+3. `3-wild-goat.png` — modo difícil (Wild Goat): Pimenta + plataformas de grama falsa
+4. `4-paused.png` — menu de pausa
 
-O jogo detecta o idioma do aparelho automaticamente (`js/i18n.js`), então as duas
-fichas mostram o app no idioma do respectivo país.
+**`store/screenshots/pt-BR/`** (ficha do Brasil):
+1. `1-titulo.png` — tela de título
+2. `2-gameplay.png` — gameplay (Mundo 1-1, Cabra Mansa)
+3. `3-cabra-da-peste.png` — modo difícil: Pimenta + plataformas de grama falsa
+4. `4-pausa.png` — menu de pausa
+
+A tela de modo difícil (item 3) mostra a profundidade do jogo — útil também como
+reforço visual do argumento contra a Guideline 4.2.
 
 ## Notas ao App Review (argumento contra a Guideline 4.2)
 
