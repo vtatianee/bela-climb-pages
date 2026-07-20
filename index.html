@@ -15,7 +15,7 @@
   IMPORTANTE: incremente o N (aqui e nos <script> abaixo) a cada publicação que
   mude CSS/JS, senão o jogador pode continuar vendo a versão anterior.
 -->
-<link rel="stylesheet" href="css/style.css?v=12">
+<link rel="stylesheet" href="css/style.css?v=13">
 </head>
 <body>
 <div id="gameWrapper">
@@ -66,6 +66,17 @@
       </button>
     </div>
   </div>
+  <div id="paywall">
+    <div class="paywallCard">
+      <div class="paywallEmoji">🐐✨</div>
+      <h2 data-i18n="paywall_title">Jogo Completo</h2>
+      <p class="paywallDesc" data-i18n="paywall_desc">Você jogou as 3 fases grátis!</p>
+      <p class="paywallStatus" id="paywallStatus"></p>
+      <button class="pauseAction unlock" id="btnUnlock">Desbloquear</button>
+      <button class="paywallLink" id="btnRestore" data-i18n="paywall_restore">Restaurar compra</button>
+      <button class="paywallLink" id="btnPaywallBack" data-i18n="paywall_back">Voltar</button>
+    </div>
+  </div>
   <div id="title">
     <h1>BELA</h1>
     <div class="sub">C L I M B</div>
@@ -85,15 +96,16 @@
   config.js declara o estado global; os módulos seguintes o utilizam;
   game.js orquestra tudo e inicia o jogo por último.
 -->
-<script src="js/config.js?v=12"></script>
-<script src="js/i18n.js?v=12"></script>
-<script src="js/audio.js?v=12"></script>
-<script src="js/music.js?v=12"></script>
-<script src="js/levels.js?v=12"></script>
-<script src="js/physics.js?v=12"></script>
-<script src="js/hazards.js?v=12"></script>
-<script src="js/render.js?v=12"></script>
-<script src="js/input.js?v=12"></script>
-<script src="js/game.js?v=12"></script>
+<script src="js/config.js?v=13"></script>
+<script src="js/i18n.js?v=13"></script>
+<script src="js/iap.js?v=13"></script>
+<script src="js/audio.js?v=13"></script>
+<script src="js/music.js?v=13"></script>
+<script src="js/levels.js?v=13"></script>
+<script src="js/physics.js?v=13"></script>
+<script src="js/hazards.js?v=13"></script>
+<script src="js/render.js?v=13"></script>
+<script src="js/input.js?v=13"></script>
+<script src="js/game.js?v=13"></script>
 </body>
 </html>

@@ -142,18 +142,27 @@ function winLevel() {
   transitionTimers.push(setTimeout(() => {
     const nextSub = sub < SUBFASES_POR_MUNDO ? sub + 1 : 1;
     const nextWorld = sub < SUBFASES_POR_MUNDO ? world : (world + 1) % WORLDS.length;
-    showMsg(t('next_level', nextWorld+1, nextSub));
+    // se a próxima fase está travada, o paywall aparecerá — não anuncia o "próximo nível"
+    if (!levelLocked(nextWorld, nextSub)) showMsg(t('next_level', nextWorld+1, nextSub));
   }, 1100));
   transitionTimers.push(setTimeout(advanceLevel, 2100));
 }
 
+// ---------- Bloqueio das fases (compra no app) ----------
+// Grátis: Mundo 1, fases 1 a 3. O resto exige o desbloqueio (ver iap.js).
+const FREE_SUBS = 3;
+function levelLocked(w, s) { return !isUnlocked() && !(w === 0 && s <= FREE_SUBS); }
+
 function advanceLevel() {
-  if (sub < SUBFASES_POR_MUNDO) {
-    sub++;
+  let nw = world, ns = sub;
+  if (ns < SUBFASES_POR_MUNDO) {
+    ns++;
   } else {
-    sub = 1;
-    world = (world + 1) % WORLDS.length; // loop worlds infinitely
+    ns = 1;
+    nw = (nw + 1) % WORLDS.length; // loop worlds infinitely
   }
+  if (levelLocked(nw, ns)) { showPaywall(); return; } // travada: oferece a compra em vez de avançar
+  world = nw; sub = ns;
   savedProgress[difficulty] = { world, sub }; // lembra onde o jogador está
   saveProgress();
   initLevel();
@@ -188,6 +197,8 @@ function startGame(diff) {
     // retoma o progresso salvo desta dificuldade (ou começa do início)
     const p = savedProgress[diff] || { world: 0, sub: 1 };
     world = p.world; sub = p.sub;
+    // não retoma numa fase travada (ex.: salva antes de o desbloqueio existir)
+    if (levelLocked(world, sub)) { world = 0; sub = FREE_SUBS; }
     initLevel();
   }, 500); // matches the CSS transition
 }
@@ -252,6 +263,52 @@ btnRestart.addEventListener('click', () => {
   initLevel();                          // devolve as 5 vidas e remonta a fase
 });
 btnQuit.addEventListener('click', backToTitle);
+
+// ---------- Paywall (desbloqueio do jogo completo) ----------
+const paywall        = document.getElementById('paywall');
+const btnUnlock      = document.getElementById('btnUnlock');
+const btnRestore     = document.getElementById('btnRestore');
+const btnPaywallBack = document.getElementById('btnPaywallBack');
+const paywallStatus  = document.getElementById('paywallStatus');
+
+function showPaywall() {
+  cancelAnimationFrame(animFrame);   // congela a fase vencida atrás do paywall
+  paused = true;                     // reaproveita o guard: nada retoma o loop
+  setMusicMuted(true);
+  paywallStatus.textContent = '';
+  btnUnlock.disabled = false;
+  btnUnlock.textContent = t('paywall_unlock', iapPriceLabel());
+  paywall.classList.add('show');
+}
+
+/** Fluxo comum de compra/restauração; ao ter sucesso, entra na fase desbloqueada. */
+async function runPurchase(action) {
+  btnUnlock.disabled = true;
+  btnRestore.disabled = true;
+  paywallStatus.textContent = t('paywall_buying');
+  const r = await action();
+  btnUnlock.disabled = false;
+  btnRestore.disabled = false;
+  if (r.ok) {
+    paywall.classList.remove('show');
+    paused = false;
+    if (audioCtx) audioCtx.resume();
+    if (soundOn) setMusicMuted(false);
+    showMsg(t(action === buyFullGame ? 'paywall_thanks' : 'paywall_restored'));
+    setTimeout(() => { if (!won && !lost) hideMsg(); }, 1600);
+    advanceLevel();                  // agora desbloqueado, entra na fase travada
+  } else if (r.cancelled) {
+    paywallStatus.textContent = '';  // usuário cancelou: silêncio
+  } else if (r.none) {
+    paywallStatus.textContent = t('paywall_none');
+  } else {
+    paywallStatus.textContent = t('paywall_error');
+  }
+}
+
+btnUnlock.addEventListener('click', () => runPurchase(buyFullGame));
+btnRestore.addEventListener('click', () => runPurchase(restorePurchases));
+btnPaywallBack.addEventListener('click', () => { paywall.classList.remove('show'); backToTitle(); });
 
 // ---------- Persistência de progresso (localStorage) ----------
 // Guarda a melhor pontuação de estrelas por subfase e a posição atual em cada
@@ -318,6 +375,8 @@ document.addEventListener('visibilitychange', () => {
 // arquivo de imagem/vídeo. É seguro rodar aqui: updateSurprise/updateHazards são
 // guardados por `started`, e stepPhysics sai cedo com a cabra parada no chão.
 loadProgress();
+loadUnlock();          // estado de desbloqueio (cache local)
+refreshEntitlement();  // no aparelho, reconcilia com a StoreKit (async)
 fitGame();
 initClouds();
 CUR = generateLevel(0, 1); // cena de fundo do título

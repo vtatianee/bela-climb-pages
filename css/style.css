@@ -138,6 +138,30 @@
   .pauseAction.restart { background: linear-gradient(180deg, #f0b84a, #d4872a); border-color: #9a5e1c; color: #4a2c08; text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
   .pauseAction.quit    { background: linear-gradient(180deg, #5c7a92, #3f5a6e); border-color: #2e4354; }
 
+  /* ----- Paywall (desbloqueio do jogo completo) ----- */
+  #paywall {
+    position: absolute; inset: 0; z-index: 25; border-radius: 16px;
+    background: rgba(12, 24, 34, 0.94);
+    display: none; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+  }
+  #paywall.show { display: flex; }
+  .paywallCard { display: flex; flex-direction: column; align-items: center; padding: 0 24px; max-width: 340px; text-align: center; }
+  .paywallEmoji { font-size: 48px; margin-bottom: 6px; }
+  .paywallCard h2 {
+    color: #ffe0a0; font-size: 30px; font-weight: 700; letter-spacing: 2px; margin-bottom: 14px;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5);
+  }
+  .paywallDesc { color: #cfe2f2; font-size: 15px; line-height: 1.5; margin-bottom: 16px; }
+  .paywallStatus { color: #ffd27a; font-size: 14px; min-height: 18px; margin-bottom: 8px; }
+  .pauseAction.unlock { background: linear-gradient(180deg, #6fae4a, #54822f); border-color: #3a5e1f; }
+  .paywallLink {
+    background: none; border: none; color: #8fb8d8;
+    font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px;
+    padding: 10px; margin-top: 4px; cursor: pointer; pointer-events: auto;
+  }
+  .paywallLink:active { opacity: 0.6; }
+
   #message {
     position: absolute; bottom: 78px; left: 50%; transform: translateX(-50%);
     font-family: 'Fredoka', sans-serif; font-weight: 600;
