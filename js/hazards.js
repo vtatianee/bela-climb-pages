@@ -153,14 +153,25 @@ function updateSurprise() {
 // ---------- (B) Perigos do modo difícil ----------
 
 /**
- * Atualiza, a cada frame (somente no modo difícil), os três perigos:
- *  (2) grama falsa que desaba após o timer;
- *  (3) pedras rolantes que descem e empurram/ferem a cabra;
- *  (4) Lobo Faminto que sobe da base — encostar = fim de jogo instantâneo.
+ * Atualiza, a cada frame (somente no modo difícil), os três perigos.
+ *
+ * A introdução é progressiva por NÚMERO DE FASE (não por mundo):
+ *  (2) grama falsa que desaba — desde a 1ª fase;
+ *  (3) pedras rolantes — a partir da 2ª fase;
+ *  (4) Lobo Faminto que sobe da base — a partir da 3ª fase (encostar = fim de jogo).
+ *
+ * Por que por fase e não por mundo: o Cabra da Peste é opt-in, e as 3 primeiras
+ * fases são a parte grátis do jogo. Escalonando por mundo, quem experimentasse o
+ * modo difícil só veria a grama falsa e nunca as pedras nem o lobo — o modo não
+ * pareceria difícil, e o paywall prometeria algo que o jogador nunca viu.
  */
 function updateHazards() {
   if (!isHard || !started || won || lost) return;
   const dt = 16; // ~ms por frame
+  // Número da fase acumulado: 1 = Mundo 1-1, 2 = Mundo 1-2, 11 = Mundo 2-1...
+  // (CUR.depth já é esse índice, base 0.) Uma vez introduzido, o perigo continua
+  // ativo em todas as fases seguintes.
+  const nivel = CUR.depth + 1;
 
   // --- (2) plataformas de grama falsa: contam o tempo e desabam ---
   for (const k in breakingTimers) {
@@ -178,8 +189,8 @@ function updateHazards() {
     }
   }
 
-  // --- (3) pedras rolantes (introduzidas a partir do Mundo 2 = world >= 1) ---
-  if (world >= 1) {
+  // --- (3) pedras rolantes (a partir da 2ª fase) ---
+  if (nivel >= 2) {
     rockTimer -= dt;
     if (rockTimer <= 0) {
       rockTimer = rockInterval + Math.random() * 800; // frequência cresce com a profundidade
@@ -202,8 +213,8 @@ function updateHazards() {
   }
   rocks = rocks.filter(rk => rk.y < H + 30 && !rk.hit);
 
-  // --- (4) Lobo Faminto subindo da base (introduzido a partir do Mundo 3 = world >= 2) ---
-  if (world >= 2) {
+  // --- (4) Lobo Faminto subindo da base (a partir da 3ª fase) ---
+  if (nivel >= 3) {
     if (wolfDelay > 0) {
       wolfDelay -= dt;
     } else {
