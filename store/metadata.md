@@ -22,7 +22,7 @@ Campos prontos para colar no **App Store Connect**. O app será publicado em
 **Subtitle** (≤30): `Slingshot climb through biomes`
 
 **Promotional Text** (≤170):
-`Fling Bela the goat up 5 living biomes to the Sacred Super Grass! Simple one-finger slingshot control, endless levels, no ads, fully offline.`
+`Fling Bela the goat up 5 living biomes to the Sacred Super Grass! First 3 levels free — one purchase unlocks the whole game. No ads, no subscription, fully offline.`
 
 **Keywords** (≤100, no spaces):
 `goat,climb,slingshot,jump,arcade,platformer,casual,offline,cute,animal,mountain,kids,fling`
@@ -42,6 +42,9 @@ FEATURES
 • 100% offline — no ads, no accounts, no data collected
 • Handcrafted art and sound, made with love
 
+FREE TO TRY
+Download and play the first 3 levels for free. A single one-time purchase unlocks the entire game forever — all 5 biomes, endless levels, both difficulty modes and the chaotic levels. No subscription, ever.
+
 Can you help Bela reach the top?
 ```
 
@@ -54,7 +57,7 @@ Can you help Bela reach the top?
 **Subtítulo** (≤30): `Arremesse a cabra pelos biomas`
 
 **Texto promocional** (≤170):
-`Arremesse a Bela por 5 biomas até o Super Capim Sagrado! Controle de estilingue com um dedo, fases infinitas, sem anúncios e 100% offline.`
+`Arremesse a Bela por 5 biomas até o Super Capim Sagrado! As 3 primeiras fases são grátis — uma compra libera o jogo todo. Sem anúncios, sem assinatura, 100% offline.`
 
 **Palavras-chave** (≤100, sem espaços):
 `cabra,escalar,estilingue,pular,arcade,plataforma,casual,offline,fofo,animais,montanha,bode`
@@ -73,6 +76,9 @@ DESTAQUES
 • Ganhe até 3 estrelas em cada fase
 • 100% offline — sem anúncios, sem contas, sem coleta de dados
 • Arte e som feitos à mão, com carinho
+
+EXPERIMENTE GRÁTIS
+Baixe e jogue as 3 primeiras fases de graça. Uma única compra libera o jogo inteiro para sempre — os 5 biomas, fases infinitas, os dois modos de dificuldade e as fases caóticas. Sem assinatura, nunca.
 
 Você ajuda a Bela a chegar ao topo?
 ```
@@ -123,13 +129,32 @@ Bela Climb is an original single-player arcade game, not a website wrapper.
   at runtime via the Web Audio API. No stock assets.
 - 5 distinct biomes with procedurally generated levels (endless), guaranteed
   solvable by a reach constraint in the level generator.
-- Two difficulty modes. Hard mode adds crumbling platforms, rolling rocks
-  (from World 2) and a rising Hungry Wolf (from World 3).
+- Two difficulty modes. Hard mode ("Wild Goat") adds crumbling platforms
+  (level 1), rolling rocks (from level 2) and a rising Hungry Wolf (from
+  level 3), so the difference is visible from the very first levels.
 - Surprise "chaotic" levels with oscillating gravity and lateral wind.
 - Native iOS integration: Haptics feedback on impacts, AVAudioSession configured
-  for playback, portrait lock, safe-area aware layout.
-- Local progress persistence, pause menu, and automatic PT-BR/EN localization.
+  for playback, portrait lock, safe-area aware layout, Hi-DPI rendering.
+- Local progress persistence, pause menu, and automatic PT-BR/EN localization
+  (the UI follows the device language).
 - Runs 100% offline. No accounts, no ads, no analytics, no data collected.
+
+IN-APP PURCHASE — HOW TO REACH AND TEST IT
+
+The app is free to download. Levels 1-1, 1-2 and 1-3 are fully playable for free.
+Finishing level 1-3 shows a paywall offering ONE non-consumable purchase
+(com.vtatianee.belaclimb.fullunlock) that unlocks the whole game permanently.
+There is no subscription and no other purchase. The paywall also has a
+"Restore purchase" button, as required for non-consumables.
+
+To reach the paywall (about 2-3 minutes):
+1. On the title screen, tap either difficulty.
+2. To jump: touch and drag Bela (the goat) backwards, then release — like a
+   slingshot. Aim for the platform above; landing on a higher platform advances
+   the climb. Reaching the glowing grass at the top completes the level.
+3. Complete levels 1-1, 1-2 and 1-3. The paywall appears automatically after 1-3.
+
+No login or test account is needed to play the free levels.
 ```
 
 ## Pendências para você confirmar
@@ -152,7 +177,9 @@ terceiros e sem coleta de dados.
     Cabra da Peste e as fases caóticas."
   - en-US: "Full Game" / "Unlock all 5 biomes, endless levels, Wild Goat mode and
     chaotic levels."
-- Screenshot de review do IAP: usar a tela do paywall (o App Store Connect pede uma).
+- **Screenshot de review do IAP: ⏳ PENDENTE.** O App Store Connect exige uma imagem
+  do produto para revisão — deve ser a tela do **paywall**. Ainda não foi capturada
+  (as 4 screenshots por idioma são do jogo, não do paywall).
 
 **Passos:**
 1. Em App Store Connect, definir o **preço do app como Free** (Pricing and Availability).
