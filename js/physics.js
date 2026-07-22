@@ -220,13 +220,33 @@ function starsFor(missed) {
 }
 
 /**
- * Trata a queda para fora da tela: conta como salto perdido e devolve a cabra
- * à última plataforma segura. (A vibração HEAVY é disparada dentro de loseTry.)
+ * Trata a queda para fora da tela: conta como salto perdido e reposiciona a cabra.
+ * (A vibração HEAVY é disparada dentro de loseTry.)
+ *
+ * No modo Cabra da Peste a queda REINICIA a subida na primeira plataforma. Isso
+ * conserta um bug real: devolver a Bela ao "último ponto seguro" a jogava no ar
+ * quando aquela plataforma era grama falsa e já tinha desabado — e ela caía de
+ * novo, perdendo vida em loop. Reiniciar também restaura as plataformas caídas:
+ * sem isso, uma grama falsa que desabou no meio do caminho poderia deixar a fase
+ * impossível de terminar (a cabra sobe em cadeia, uma plataforma por vez).
+ *
+ * No modo Cabra Mansa não existe grama falsa, então o retorno ao último ponto
+ * seguro continua válido (e mais gentil).
  */
 function fallLose() {
   goat.jumping = false;
   goat.vx = 0; goat.vy = 0; goat.spinning = false; goat.angle = 0;
-  goat.x = goat.safeX; goat.y = goat.safeY;
+  if (isHard) {
+    const sp = plats()[0];                                    // a 1ª plataforma nunca é frágil
+    goat.x = obstacle ? (sp.x + 26) : (sp.x + sp.w / 2);      // mesma posição inicial da fase
+    goat.y = sp.y - GOAT_R;
+    goat.plat = 0;
+    fallenPlats = {};                                         // restaura o caminho
+    breakingTimers = {};
+  } else {
+    goat.x = goat.safeX; goat.y = goat.safeY;
+  }
+  goat.safeX = goat.x; goat.safeY = goat.y;
   goat.onGround = true; goat.face = 'happy';
   loseTry(t('fell'));
 }
