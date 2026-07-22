@@ -107,12 +107,14 @@ cada ficha no idioma do respectivo país (o jogo detecta o locale via `js/i18n.j
 2. `2-gameplay.png` — gameplay (World 1-1, Gentle Goat)
 3. `3-wild-goat.png` — modo difícil (Wild Goat): Pimenta + plataformas de grama falsa
 4. `4-paused.png` — menu de pausa
+5. `5-achievements.png` — tela de conquistas (6 de 12 desbloqueadas)
 
 **`store/screenshots/pt-BR/`** (ficha do Brasil):
 1. `1-titulo.png` — tela de título
 2. `2-gameplay.png` — gameplay (Mundo 1-1, Cabra Mansa)
 3. `3-cabra-da-peste.png` — modo difícil: Pimenta + plataformas de grama falsa
 4. `4-pausa.png` — menu de pausa
+5. `5-conquistas.png` — tela de conquistas (6 de 12 desbloqueadas)
 
 A tela de modo difícil (item 3) mostra a profundidade do jogo — útil também como
 reforço visual do argumento contra a Guideline 4.2.
@@ -177,9 +179,9 @@ terceiros e sem coleta de dados.
     Cabra da Peste e as fases caóticas."
   - en-US: "Full Game" / "Unlock all 5 biomes, endless levels, Wild Goat mode and
     chaotic levels."
-- **Screenshot de review do IAP: ⏳ PENDENTE.** O App Store Connect exige uma imagem
-  do produto para revisão — deve ser a tela do **paywall**. Ainda não foi capturada
-  (as 4 screenshots por idioma são do jogo, não do paywall).
+- **Screenshot de review do IAP: ✅ pronta** — `store/screenshots/iap-review/paywall-en.png`
+  (1320x2868). Há também a versão em português (`paywall-pt.png`). Use a inglesa,
+  já que a App Review é feita em inglês.
 
 **Passos:**
 1. Em App Store Connect, definir o **preço do app como Free** (Pricing and Availability).
