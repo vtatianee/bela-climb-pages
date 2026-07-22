@@ -117,6 +117,9 @@ let widthMul = 1.0;         // multiplicador de largura das plataformas
 
 // ---------- Perigos do modo difícil ("Cabra da Peste") ----------
 let isHard = false;         // atalho = (difficulty === 'hard')
+// O que aconteceu NESTA fase — alimenta as conquistas (achievements.js).
+// Resetado em initLevel; preenchido por hazards.js conforme os perigos ocorrem.
+let levelFlags = { rockHit: false, wolfSeen: false, platformFell: false };
 let breakingTimers = {};    // índice da plataforma -> ms até desabar
 let fallenPlats = {};       // índice da plataforma -> true quando já caiu
 let rocks = [];             // pedras rolantes { x, y, vx, vy, r, spin }

@@ -64,6 +64,8 @@ function initLevel() {
   breakingTimers = {};
   fallenPlats = {};
   rocks = [];
+  // zera o que aconteceu na fase (alimenta as conquistas)
+  levelFlags = { rockHit: false, wolfSeen: false, platformFell: false };
   // hazards speed up with depth: rocks more frequent, wolf faster
   rockInterval = Math.max(1800, 4000 - lv.depth * 120);
   rockTimer = rockInterval;
@@ -123,6 +125,7 @@ function winLevel() {
   const starKey = `${world}-${sub}`;
   stars[starKey] = Math.max(stars[starKey]||0, s);
   saveProgress(); // persiste a melhor pontuação de estrelas
+  achOnLevelWin(s); // avalia as conquistas desta fase
   if (isHard) {
     // ate the chili: spicy fire particles + extra spin
     goat.spinning = true; goat.angle = 0;
@@ -264,6 +267,23 @@ btnRestart.addEventListener('click', () => {
 });
 btnQuit.addEventListener('click', backToTitle);
 
+// ---------- Tela de conquistas ----------
+// Acessível do menu de pausa e da tela de título. Não mexe no estado do jogo:
+// é só uma camada por cima (o menu de pausa já congelou o loop, se estiver aberto).
+const achScreen = document.getElementById('achievements');
+
+function openAchievements() {
+  renderAchievements();          // monta a lista com o progresso atual
+  achScreen.classList.add('show');
+}
+function closeAchievements() {
+  achScreen.classList.remove('show');
+}
+
+document.getElementById('btnAchPause').addEventListener('click', openAchievements);
+document.getElementById('btnAchTitle').addEventListener('click', openAchievements);
+document.getElementById('btnAchClose').addEventListener('click', closeAchievements);
+
 // ---------- Paywall (desbloqueio do jogo completo) ----------
 const paywall        = document.getElementById('paywall');
 const btnUnlock      = document.getElementById('btnUnlock');
@@ -375,6 +395,7 @@ document.addEventListener('visibilitychange', () => {
 // arquivo de imagem/vídeo. É seguro rodar aqui: updateSurprise/updateHazards são
 // guardados por `started`, e stepPhysics sai cedo com a cabra parada no chão.
 loadProgress();
+loadAchievements();    // conquistas salvas no aparelho
 loadUnlock();          // estado de desbloqueio (cache local)
 refreshEntitlement();  // no aparelho, reconcilia com a StoreKit (async)
 fitGame();

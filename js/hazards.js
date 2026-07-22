@@ -179,6 +179,7 @@ function updateHazards() {
     if (breakingTimers[k] <= 0) {
       const pi = +k;
       fallenPlats[pi] = true;            // desaba — sem colisão
+      levelFlags.platformFell = true;    // conquista "Chão Falso"
       delete breakingTimers[k];
       spawnDust(plats()[pi].x + plats()[pi].w / 2, plats()[pi].y);
       beep(110, 0.3, 'sawtooth', 0.13, 50); // estrondo
@@ -205,6 +206,7 @@ function updateHazards() {
     // atingiu a cabra? empurra para baixo e custa uma vida (loseTry já vibra HEAVY)
     if (!rk.hit && Math.hypot(rk.x - goat.x, rk.y - goat.y) < rk.r + GOAT_R) {
       rk.hit = true;
+      levelFlags.rockHit = true;         // conquista "Pedra no Caminho"
       goat.onGround = false; goat.jumping = true;
       goat.vy = 7; goat.vx += rk.vx * 2; goat.face = 'dizzy';
       sndFall();
@@ -219,6 +221,8 @@ function updateHazards() {
       wolfDelay -= dt;
     } else {
       wolfY -= wolfSpeed * 2; // sobe devagar, mais rápido conforme a profundidade
+      // só conta quando o lobo de fato entrou na tela (conquista "Escapou do Lobo")
+      if (wolfY < H) levelFlags.wolfSeen = true;
       if (goat.y + GOAT_R >= wolfY) {
         // o lobo alcançou a cabra — fim de jogo instantâneo
         triggerHaptic('HEAVY'); // impacto tátil forte de colisão fatal

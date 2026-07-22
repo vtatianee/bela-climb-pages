@@ -138,6 +138,49 @@
   .pauseAction.restart { background: linear-gradient(180deg, #f0b84a, #d4872a); border-color: #9a5e1c; color: #4a2c08; text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
   .pauseAction.quit    { background: linear-gradient(180deg, #5c7a92, #3f5a6e); border-color: #2e4354; }
 
+  /* ----- Conquistas ----- */
+  #achievements {
+    position: absolute; inset: 0; z-index: 30; border-radius: 16px;
+    background: rgba(12, 24, 34, 0.96);
+    display: none; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+  }
+  #achievements.show { display: flex; }
+  .achCard { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 20px 18px; height: 100%; }
+  .achCard h2 {
+    color: #ffe0a0; font-size: 26px; font-weight: 700; letter-spacing: 3px; margin-bottom: 2px;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.35);
+  }
+  .achCounter { color: #8fb8d8; font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .achList { flex: 1; width: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+  .achItem {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 9px 12px; margin-bottom: 8px;
+  }
+  .achItem.got { background: rgba(111,174,74,0.18); border-color: rgba(111,174,74,0.5); }
+  .achEmoji { font-size: 26px; width: 34px; text-align: center; flex: 0 0 auto; filter: grayscale(1) opacity(0.5); }
+  .achItem.got .achEmoji { filter: none; }
+  .achInfo { min-width: 0; }
+  .achName { color: #e8e8ea; font-size: 15px; font-weight: 700; }
+  .achItem.got .achName { color: #d6f5b8; }
+  .achDesc { color: #8fa8bb; font-size: 12.5px; line-height: 1.35; }
+
+  /* aviso de conquista desbloqueada */
+  #achToast {
+    position: absolute; top: 76px; left: 50%; transform: translate(-50%, -12px);
+    z-index: 40; display: none; align-items: center; gap: 10px;
+    background: linear-gradient(180deg, #6fae4a, #54822f);
+    border: 2.5px solid #3a5e1f; border-radius: 16px; padding: 8px 16px;
+    font-family: 'Fredoka', sans-serif; pointer-events: none;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 6px 14px rgba(0,0,0,0.35);
+    opacity: 0; transition: opacity 0.25s, transform 0.25s;
+  }
+  #achToast.show { display: flex; opacity: 1; transform: translate(-50%, 0); }
+  .achToastEmoji { font-size: 26px; }
+  .achToastTitle { color: #eaffd6; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+  .achToastName { color: #fff; font-size: 15px; font-weight: 700; text-shadow: 0 2px 0 rgba(0,0,0,0.35); }
+
   /* ----- Paywall (desbloqueio do jogo completo) ----- */
   #paywall {
     position: absolute; inset: 0; z-index: 25; border-radius: 16px;
