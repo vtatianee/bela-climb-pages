@@ -138,6 +138,32 @@
   .pauseAction.restart { background: linear-gradient(180deg, #f0b84a, #d4872a); border-color: #9a5e1c; color: #4a2c08; text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
   .pauseAction.quit    { background: linear-gradient(180deg, #5c7a92, #3f5a6e); border-color: #2e4354; }
 
+  /* ----- Botão de Conquistas -----
+     Mesma linguagem dos outros botões (arredondado, gradiente, relevo 3D), mas
+     mais estreito e em violeta: é uma ação SECUNDÁRIA, não deve competir com os
+     botões de dificuldade no título nem com o "Continuar" na pausa. */
+  .achBtn {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    width: 200px; margin: 10px 0 0; padding: 11px 18px;
+    border-radius: 22px; border: 3px solid #4a3570;
+    background: linear-gradient(180deg, #7a5fa8, #5c4382);
+    font-size: 16px; cursor: pointer; pointer-events: auto;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,0.4);
+    box-shadow: 0 5px 0 rgba(0,0,0,0.3), 0 8px 14px rgba(0,0,0,0.32),
+                inset 0 2px 0 rgba(255,255,255,0.22);
+    transition: transform 0.08s, filter 0.15s;
+  }
+  .achBtn:hover { filter: brightness(1.08); }
+  .achBtn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.3);
+  }
+  .achBtn .ico {
+    width: 19px; height: 19px; flex: 0 0 auto;
+    filter: drop-shadow(0 2px 0 rgba(0,0,0,0.32));
+  }
+
   /* ----- Conquistas ----- */
   #achievements {
     position: absolute; inset: 0; z-index: 30; border-radius: 16px;
