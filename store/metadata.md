@@ -200,3 +200,24 @@ terceiros e sem coleta de dados.
 
 **Botão "Restaurar compra":** já existe no paywall (a Apple exige para
 não-consumíveis) e chama `restore` → `AppStore.sync()`.
+
+---
+
+## Perguntas técnicas do envio (respostas prontas)
+
+### Export compliance / Criptografia — JÁ RESOLVIDO no código
+Adicionada a chave `ITSAppUsesNonExemptEncryption = false` no Info.plist. Motivo: o
+jogo é 100% offline e não usa criptografia própria — só HTTPS/TLS do sistema e a
+StoreKit da Apple, ambos isentos. Com isso, a Apple **não pergunta** export
+compliance a cada envio e não é preciso relatório de autoclassificação.
+- Se a pergunta ainda aparecer no App Store Connect: responder **"No"** para
+  "uses non-exempt encryption".
+
+### Tax Category (App Store Connect > seu app > "Tax Category")
+Usar a categoria **padrão "App Store Software"** (aplicativos/jogos). O Bela Climb é
+um jogo — não é livro, revista, áudio-livro nem serviço específico, então nenhuma
+categoria especial se aplica. A IAP de desbloqueio herda a mesma categoria.
+
+### Age Rating (lembrete)
+Violência de desenho leve (lobo, pedras) → **Infrequent/Mild Cartoon Violence**;
+resto **None**. Resultado esperado: 4+ ou 9+.
