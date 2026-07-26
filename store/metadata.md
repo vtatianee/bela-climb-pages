@@ -3,8 +3,8 @@
 Campos prontos para colar no **App Store Connect**. O app será publicado em
 **Estados Unidos, Canadá (inglês)** e **Brasil (português)**.
 
-- **Idioma primário:** Portuguese (Brazil)
-- **Idioma adicional:** English (U.S.) — cobre EUA e Canadá
+- **Idioma primário:** English (U.S.) — cobre EUA e Canadá
+- **Idioma adicional:** Portuguese (Brazil)
 - **Privacy Policy URL:** https://vtatianee.github.io/bela-climb-pages/privacy.html
 - **Support URL:** https://vtatianee.github.io/bela-climb-pages/support.html
 - **Marketing URL (opcional):** https://vtatianee.github.io/bela-climb-pages/
