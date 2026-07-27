@@ -415,3 +415,14 @@ if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Spl
     if (p && p.catch) p.catch(() => {});
   } catch (e) { /* splash indisponível: o jogo segue normalmente */ }
 }
+
+// ---------- Barra de status nativa (Capacitor) ----------
+// Esconde a hora, sinal, wifi e bateria: é uma experiência de jogo em tela
+// cheia, e essas informações não fazem parte da interface do Bela Climb.
+// Fora do app nativo (navegador) o plugin não existe e a chamada é ignorada.
+if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar) {
+  try {
+    const p = window.Capacitor.Plugins.StatusBar.hide();
+    if (p && p.catch) p.catch(() => {});
+  } catch (e) { /* status bar indisponível: o jogo segue normalmente */ }
+}
