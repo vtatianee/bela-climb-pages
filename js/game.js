@@ -173,7 +173,36 @@ function advanceLevel() {
 }
 
 // ---------- Loop principal ----------
-function loop(){ updateSurprise(); updateHazards(); stepPhysics(); updateJuice(); render(); animFrame=requestAnimationFrame(loop); }
+// Passo FIXO de 60 Hz: a física (e os timers de 16 ms de hazards.js) avança
+// sempre na mesma velocidade, e o desenho acontece uma vez por quadro da tela.
+// Sem isso, o jogo rodava em câmera lenta a 30 fps (Modo de Pouca Energia,
+// aparelho quente) e acelerado a 120 Hz (telas ProMotion).
+const STEP_MS = 1000 / 60;
+let lastTick = 0, tickAcc = 0;
+function loop(ts) {
+  const now = performance.now();
+  if (ts === undefined) { lastTick = now; tickAcc = STEP_MS; }  // chamada direta: (re)começa
+  tickAcc += Math.min(100, now - lastTick);   // limita o "atraso" após travadas
+  lastTick = now;
+  while (tickAcc >= STEP_MS) {
+    updateSurprise(); updateHazards(); stepPhysics(); updateJuice();
+    tickAcc -= STEP_MS;
+  }
+  render();
+  if (fpsEl) countFps(now);
+  animFrame = requestAnimationFrame(loop);
+}
+
+// Diagnóstico: abra o jogo com ?fps no endereço para ver os quadros por segundo.
+const fpsEl = location.search.includes('fps') ? Object.assign(document.createElement('div'), {
+  style: 'position:fixed;left:6px;bottom:6px;z-index:99;font:12px monospace;color:#fff;background:#0008;padding:2px 6px;border-radius:4px',
+}) : null;
+if (fpsEl) document.body.appendChild(fpsEl);
+let fpsFrames = 0, fpsSince = 0;
+function countFps(now) {
+  fpsFrames++;
+  if (now - fpsSince >= 1000) { fpsEl.textContent = fpsFrames + ' fps'; fpsFrames = 0; fpsSince = now; }
+}
 
 // ---------- Botao de reiniciar fase (apos game over) ----------
 btnNext.addEventListener('click',()=>{
