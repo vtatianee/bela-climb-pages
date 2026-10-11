@@ -22,11 +22,11 @@
 // Cada mundo define aparência (cores de fundo/nuvem, superfície) e o tipo de
 // obstáculo sólido que aparece na primeira plataforma.
 const WORLDS = [
-  { name:"Floresta", biome:'forest',  bg:['#7ec8e3','#bfe3a8'], snow:false, surface:'rock', cloud:'#ffffff', obstacle:'log' },
-  { name:"Rio",      biome:'river',   bg:['#8fd0e8','#a8d8ea'], snow:false, surface:'wood', cloud:'#eef8ff', obstacle:'wetrock' },
-  { name:"Lago",     biome:'lake',    bg:['#9fd4d0','#cfeee6'], snow:false, surface:'rock', cloud:'#eafff7', obstacle:'lily' },
-  { name:"Vulcão",   biome:'volcano', bg:['#e08050','#7a2a18'], snow:false, surface:'rock', cloud:'#ffd0b0', obstacle:'emberrock' },
-  { name:"Neve",     biome:'glacier', bg:['#2a3a6e','#9ec8e8'], snow:true,  surface:'ice',  cloud:'#dceeff', obstacle:'icespike' },
+  { name:"Floresta", biome:'forest',  bg:['#5cc3f0','#c8f0a0'], snow:false, surface:'log',    cloud:'#ffffff', obstacle:'log' },
+  { name:"Rio",      biome:'river',   bg:['#5fc2f2','#b5e6f5'], snow:false, surface:'raft',   cloud:'#eef8ff', obstacle:'wetrock' },
+  { name:"Lago",     biome:'lake',    bg:['#76d3df','#e0f7ec'], snow:false, surface:'lily',   cloud:'#eafff7', obstacle:'lily' },
+  { name:"Vulcão",   biome:'volcano', bg:['#ff8a4c','#5e1a10'], snow:false, surface:'basalt', cloud:'#ffd0b0', obstacle:'emberrock' },
+  { name:"Neve",     biome:'glacier', bg:['#1d2b6b','#8fc3f0'], snow:true,  surface:'ice',    cloud:'#dceeff', obstacle:'icespike' },
 ];
 
 /** Atalho: retorna o nível corrente montado proceduralmente. */

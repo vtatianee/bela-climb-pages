@@ -30,8 +30,9 @@ Direção: cartoon com muito movimento, mantendo a identidade atual.
 1. Sensação de jogo (FEITA, em `js/juice.js`): squash & stretch da Bela,
    expressões (mira, susto, piscada), tremor de tela, poeira, plataforma que
    afunda, arco de força ao redor da Bela. Só visual: não mexe em hitbox.
-2. Mundo: plataformas temáticas por bioma, fundo em camadas com parallax,
-   cores mais saturadas.
+2. Mundo (FEITA, em `js/scenery.js` + `drawPlatforms` de `render.js`):
+   plataformas por bioma (tronco, jangada, vitória-régia, basalto, gelo),
+   montanhas com parallax, seres do ambiente, céus mais saturados.
 3. Comemoração e UI: confete, estrelas animadas, tela inicial animada,
    botões "apertáveis".
 O Figma está conectado (MCP) para telas, arte dos biomas e material da loja.

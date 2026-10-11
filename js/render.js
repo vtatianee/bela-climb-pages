@@ -107,57 +107,22 @@ function drawBg() {
   g.addColorStop(0,lv.bg[0]); g.addColorStop(1,lv.bg[1]);
   ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
 
-  // soft sun glow
-  const sun = ctx.createRadialGradient(330,90,10,330,90,140);
-  sun.addColorStop(0,'rgba(255,250,220,0.55)');
-  sun.addColorStop(1,'rgba(255,250,220,0)');
-  ctx.fillStyle = sun; ctx.fillRect(0,0,W,H);
+  // brilho do sol (na geleira, o céu escuro ganha aurora boreal)
+  if (lv.biome === 'glacier') drawAurora();
+  else {
+    const sun = ctx.createRadialGradient(330,90,10,330,90,140);
+    sun.addColorStop(0,'rgba(255,250,220,0.6)');
+    sun.addColorStop(1,'rgba(255,250,220,0)');
+    ctx.fillStyle = sun; ctx.fillRect(0,0,W,H);
+  }
 
-  // distant range (lightest, hazy)
-  ctx.fillStyle = 'rgba(255,255,255,0.18)';
-  ctx.beginPath();
-  ctx.moveTo(0,H);
-  ctx.lineTo(0,360); ctx.lineTo(70,270); ctx.lineTo(150,330);
-  ctx.lineTo(240,230); ctx.lineTo(330,310); ctx.lineTo(420,250);
-  ctx.lineTo(420,H); ctx.closePath(); ctx.fill();
-
-  // mid range
-  ctx.fillStyle = 'rgba(40,55,75,0.20)';
-  ctx.beginPath();
-  ctx.moveTo(0,H);
-  ctx.lineTo(0,420); ctx.lineTo(110,250); ctx.lineTo(210,360);
-  ctx.lineTo(300,200); ctx.lineTo(420,330);
-  ctx.lineTo(420,H); ctx.closePath(); ctx.fill();
-
-  // main peak (darkest)
-  const peakX = 250, peakY = 90;
-  ctx.fillStyle = 'rgba(30,40,58,0.30)';
-  ctx.beginPath();
-  ctx.moveTo(0,H);
-  ctx.lineTo(40,440); ctx.lineTo(150,290);
-  ctx.lineTo(peakX,peakY); ctx.lineTo(350,260); ctx.lineTo(420,400);
-  ctx.lineTo(420,H); ctx.closePath(); ctx.fill();
-
-  // snow cap on main peak
-  ctx.fillStyle = 'rgba(255,255,255,0.75)';
-  ctx.beginPath();
-  ctx.moveTo(peakX,peakY);
-  ctx.lineTo(peakX-34,peakY+58);
-  ctx.lineTo(peakX-22,peakY+48); ctx.lineTo(peakX-10,peakY+60);
-  ctx.lineTo(peakX+4,peakY+46); ctx.lineTo(peakX+18,peakY+58);
-  ctx.lineTo(peakX+30,peakY+50);
-  ctx.closePath(); ctx.fill();
-
-  // snow cap on left mid peak
-  ctx.beginPath();
-  ctx.moveTo(110,250); ctx.lineTo(92,286);
-  ctx.lineTo(104,278); ctx.lineTo(116,290); ctx.lineTo(128,276);
-  ctx.closePath(); ctx.fill();
+  // montanhas em três camadas com parallax, coloridas por bioma (scenery.js)
+  drawMountains(lv);
 
   // low haze band
   const haze = ctx.createLinearGradient(0,300,0,460);
   haze.addColorStop(0,'rgba(255,255,255,0)');
-  haze.addColorStop(1, lv.snow ? 'rgba(210,230,245,0.35)' : 'rgba(255,250,235,0.28)');
+  haze.addColorStop(1, lv.snow ? 'rgba(210,230,245,0.35)' : lv.biome === 'volcano' ? 'rgba(255,110,50,0.22)' : 'rgba(255,250,235,0.28)');
   ctx.fillStyle = haze; ctx.fillRect(0,300,W,160);
 
   // themed base of the mountain (bottom of the screen) per biome
@@ -262,11 +227,138 @@ function drawPlatforms() {
       ctx.restore();
       return;
     }
-    // shadow (all types)
-    ctx.fillStyle='rgba(0,0,0,0.18)';
-    ctx.beginPath(); ctx.roundRect(p.x+3,p.y+5,p.w,PH,5); ctx.fill();
+    // sombra (a vitória-régia desenha a sua própria, oval)
+    if (surf !== 'lily') {
+      ctx.fillStyle='rgba(0,0,0,0.18)';
+      ctx.beginPath(); ctx.roundRect(p.x+3,p.y+5,p.w,PH,5); ctx.fill();
+    }
 
-    if (surf === 'rock') {
+    const t = juice.t;   // relógio das animações (pulsos, gotas, brilhos)
+
+    if (surf === 'log') {
+      // floresta: tronco deitado, com casca, anéis na ponta e musgo
+      const r = PH/2;
+      ctx.fillStyle = '#8a5530';
+      ctx.beginPath(); ctx.roundRect(p.x,p.y,p.w,PH,r); ctx.fill();
+      ctx.strokeStyle = 'rgba(55,28,10,0.45)'; ctx.lineWidth = 1.4;
+      for (const yy of [5, 10, 14]) {
+        ctx.beginPath(); ctx.moveTo(p.x+r, p.y+yy);
+        ctx.quadraticCurveTo(p.x+p.w/2, p.y+yy+(yy===10?2:-1.5), p.x+p.w-r*1.6, p.y+yy);
+        ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(255,220,170,0.28)';
+      ctx.beginPath(); ctx.roundRect(p.x+r, p.y+2, p.w-r*2, 3, 1.5); ctx.fill();
+      const ex = p.x+p.w-r, ey = p.y+r;
+      ctx.fillStyle = '#dcab6e';
+      ctx.beginPath(); ctx.ellipse(ex, ey, r*0.62, r-1, 0, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = '#a87440'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.ellipse(ex, ey, r*0.38, r*0.55, 0, 0, Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(ex, ey, r*0.15, r*0.2, 0, 0, Math.PI*2); ctx.stroke();
+      ctx.fillStyle = '#5fae3a';
+      for (let j=0;j<3;j++) {
+        if ((i+j)%2) continue;
+        ctx.beginPath(); ctx.ellipse(p.x+p.w*(0.18+0.3*j), p.y+1, 7, 3.5, 0, Math.PI, 0); ctx.fill();
+      }
+      if (i%3===1) {   // brotinho
+        const sx = p.x+p.w*0.68;
+        ctx.strokeStyle = '#4f9a2e'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(sx, p.y); ctx.lineTo(sx, p.y-8); ctx.stroke();
+        ctx.fillStyle = '#7cc84a';
+        ctx.beginPath(); ctx.ellipse(sx-4, p.y-8, 4.5, 2.2, -0.5, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(sx+4, p.y-9, 4.5, 2.2, 0.5, 0, Math.PI*2); ctx.fill();
+      }
+
+    } else if (surf === 'raft') {
+      // rio: jangada de dois troncos amarrados com corda, pingando água
+      ctx.fillStyle = '#b37b45';
+      ctx.beginPath(); ctx.roundRect(p.x, p.y, p.w, 9, 4.5); ctx.fill();
+      ctx.fillStyle = '#93622f';
+      ctx.beginPath(); ctx.roundRect(p.x+3, p.y+9, p.w-6, 9, 4.5); ctx.fill();
+      ctx.fillStyle = 'rgba(255,230,190,0.3)';
+      ctx.fillRect(p.x+5, p.y+2, p.w-10, 2);
+      const ropes = p.w > 90 ? [0.12, 0.5, 0.88] : [0.18, 0.82];
+      for (const k of ropes) {
+        const rx = p.x + p.w*k - 3;
+        ctx.fillStyle = '#ead6a6'; ctx.fillRect(rx, p.y-1, 6, PH+1);
+        ctx.strokeStyle = 'rgba(120,90,40,0.6)'; ctx.lineWidth = 1;
+        for (let yy=p.y+2; yy<p.y+PH; yy+=4) { ctx.beginPath(); ctx.moveTo(rx, yy); ctx.lineTo(rx+6, yy+3); ctx.stroke(); }
+      }
+      const fall = (t*0.7 + i*23) % 36;   // gota caindo
+      ctx.fillStyle = `rgba(120,200,255,${1 - fall/36})`;
+      ctx.beginPath(); ctx.arc(p.x+p.w*0.35, p.y+PH+2+fall, 1.8, 0, Math.PI*2); ctx.fill();
+
+    } else if (surf === 'lily') {
+      // lago: vitória-régia com o corte característico e uma flor de vez em quando
+      const cx = p.x+p.w/2, cy = p.y+6, rx = p.w/2+4, ry = 8;
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.beginPath(); ctx.ellipse(cx+3, cy+8, rx, ry, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#2e7d32';
+      ctx.beginPath(); ctx.ellipse(cx, cy+3, rx, ry, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#5cbf4a';
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.ellipse(cx, cy, rx, ry, 0, 0.8, 0.45 + Math.PI*2); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(30,100,40,0.45)'; ctx.lineWidth = 1;
+      for (const a of [1.4, 2.3, 3.2, 4.1, 5.0, 5.9]) {
+        ctx.beginPath(); ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a)*rx*0.85, cy + Math.sin(a)*ry*0.85); ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.ellipse(cx, cy, rx-2, ry-2, 0, Math.PI*1.15, Math.PI*1.85); ctx.stroke();
+      if (i%3===1) {
+        const fx = p.x+p.w*0.2, fy = p.y+3;
+        ctx.fillStyle = '#f6a6c8';
+        for (let k=0;k<6;k++) { const a=k*Math.PI/3; ctx.beginPath(); ctx.ellipse(fx+Math.cos(a)*4, fy+Math.sin(a)*2.5, 3.2, 1.8, a, 0, Math.PI*2); ctx.fill(); }
+        ctx.fillStyle = '#ffe060'; ctx.beginPath(); ctx.arc(fx, fy, 2, 0, Math.PI*2); ctx.fill();
+      }
+
+    } else if (surf === 'basalt') {
+      // vulcão: rocha escura de base irregular com rachaduras de lava pulsando
+      ctx.fillStyle = '#3a2e2b';
+      ctx.beginPath(); ctx.moveTo(p.x+4, p.y); ctx.lineTo(p.x+p.w-4, p.y);
+      ctx.quadraticCurveTo(p.x+p.w, p.y, p.x+p.w, p.y+5);
+      ctx.lineTo(p.x+p.w-2, p.y+PH-3);
+      for (let x=p.x+p.w-8, k=0; x>p.x+4; x-=10, k++) ctx.lineTo(x, p.y+PH+(k%2?4:-1));
+      ctx.lineTo(p.x+1, p.y+PH-3); ctx.lineTo(p.x, p.y+5);
+      ctx.quadraticCurveTo(p.x, p.y, p.x+4, p.y); ctx.fill();
+      ctx.fillStyle = '#4d3c37';
+      ctx.beginPath(); ctx.roundRect(p.x+2, p.y, p.w-4, 5, 2); ctx.fill();
+      const glow = 0.55 + 0.35*Math.sin(t*0.08 + i);
+      ctx.strokeStyle = `rgba(255,${120+glow*90|0},30,${0.6+glow*0.4})`; ctx.lineWidth = 2;
+      for (const k of [0.3, 0.72]) {
+        const cx = p.x+p.w*k;
+        ctx.beginPath(); ctx.moveTo(cx, p.y+4); ctx.lineTo(cx+5, p.y+10); ctx.lineTo(cx-1, p.y+PH+1); ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(255,90,30,0.4)'; ctx.fillRect(p.x+4, p.y, p.w-8, 1.5);
+
+    } else if (surf === 'ice') {
+      // neve: bloco de gelo brilhante, capa de neve, pingentes e um brilho piscando
+      const g = ctx.createLinearGradient(0, p.y, 0, p.y+PH);
+      g.addColorStop(0, '#e6f6ff'); g.addColorStop(1, '#8fc4ea');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.roundRect(p.x,p.y,p.w,PH,5); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      for (const k of [0.25, 0.6]) {
+        const sx = p.x+p.w*k;
+        ctx.beginPath(); ctx.moveTo(sx, p.y+PH-3); ctx.lineTo(sx+6, p.y+3); ctx.lineTo(sx+10, p.y+3); ctx.lineTo(sx+4, p.y+PH-3); ctx.fill();
+      }
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.roundRect(p.x-1, p.y-4, p.w+2, 7, 3.5); ctx.fill();
+      for (let x=p.x+8; x<p.x+p.w-6; x+=17) { ctx.beginPath(); ctx.arc(x, p.y+3, 2.5, 0, Math.PI); ctx.fill(); }
+      ctx.fillStyle = 'rgba(215,238,255,0.9)';
+      const n = Math.max(2, Math.floor(p.w/22));
+      for (let j=0;j<n;j++) {
+        const ix = p.x + (j+0.5)*p.w/n, len = 6 + ((i+j)*7 % 6);
+        ctx.beginPath(); ctx.moveTo(ix-3, p.y+PH-1); ctx.lineTo(ix+3, p.y+PH-1); ctx.lineTo(ix, p.y+PH+len); ctx.closePath(); ctx.fill();
+      }
+      const tw = Math.sin(t*0.05 + i*2);
+      if (tw > 0.6) {
+        const sx = p.x + p.w*(0.2 + (i*0.37 % 1)*0.6), sy = p.y+8, s = (tw-0.6)*9;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath(); ctx.moveTo(sx, sy-s); ctx.lineTo(sx+s*0.3, sy); ctx.lineTo(sx, sy+s); ctx.lineTo(sx-s*0.3, sy); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(sx-s, sy); ctx.lineTo(sx, sy+s*0.3); ctx.lineTo(sx+s, sy); ctx.lineTo(sx, sy-s*0.3); ctx.closePath(); ctx.fill();
+      }
+
+    } else if (surf === 'rock') {
       ctx.fillStyle = ['#7a5c3a','#6b4f30','#5e4428'][i%3];
       ctx.beginPath(); ctx.roundRect(p.x,p.y,p.w,PH,5); ctx.fill();
       ctx.fillStyle='rgba(255,255,255,0.14)'; ctx.fillRect(p.x+4,p.y+2,p.w-8,3);
@@ -303,17 +395,6 @@ function drawPlatforms() {
       ctx.fillStyle='rgba(255,255,255,0.85)';
       for (let j=0;j<4;j++){ ctx.beginPath(); ctx.arc(p.x+12+j*((p.w-24)/3),p.y+4,2.5,0,Math.PI*2); ctx.fill(); }
 
-    } else if (surf === 'ice') {
-      ctx.fillStyle = '#a8cfe8';
-      ctx.beginPath(); ctx.roundRect(p.x,p.y,p.w,PH,4); ctx.fill();
-      // glossy highlight
-      ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.fillRect(p.x+4,p.y+2,p.w-8,4);
-      // snow layer on top
-      ctx.fillStyle='rgba(255,255,255,0.9)';
-      ctx.beginPath(); ctx.roundRect(p.x,p.y-3,p.w,6,3); ctx.fill();
-      // icicle
-      ctx.fillStyle='rgba(220,240,255,0.8)';
-      ctx.beginPath(); ctx.moveTo(p.x+p.w*0.5,p.y+PH); ctx.lineTo(p.x+p.w*0.55,p.y+PH); ctx.lineTo(p.x+p.w*0.525,p.y+PH+7); ctx.closePath(); ctx.fill();
     }
     ctx.restore();
   });
@@ -566,9 +647,11 @@ function render() {
   }
   drawBg();
   if (!CUR.weird) updateAndDrawClouds();
+  drawAmbientBack();   // pássaros, libélulas, peixes (scenery.js)
   drawPlatforms(); drawObstacle(); drawGoal(); drawParticles(); drawDragLine();
   if (isHard) drawRocks();
   if (isHard && won) goat.angle += 0.35;  // spicy spin after eating the chili
+  drawAmbientFront();  // neve, brasas, folhas caindo (scenery.js)
   const dip = goat.onGround ? platDipOf(goat.plat) : 0;   // acompanha a plataforma que afunda
   drawGoat(goat.x, goat.y + dip, goatDisplayFace(), goat.angle);
   if (isHard) drawWolf();   // wolf in front, at the bottom

@@ -42,6 +42,7 @@ function initLevel() {
   transitionTimers = [];
   // build the current level procedurally for this world/subfase
   CUR = generateLevel(world, sub);
+  initScenery();      // seres do bioma (pássaros, neve, brasas...)
   const lv = CUR;
   // apply the difficulty width multiplier (hitbox follows p.w/p.x)
   lv.platforms.forEach((p,i)=>{
@@ -185,7 +186,7 @@ function loop(ts) {
   tickAcc += Math.min(100, now - lastTick);   // limita o "atraso" após travadas
   lastTick = now;
   while (tickAcc >= STEP_MS) {
-    updateSurprise(); updateHazards(); stepPhysics(); updateJuice();
+    updateSurprise(); updateHazards(); stepPhysics(); updateJuice(); updateScenery();
     tickAcc -= STEP_MS;
   }
   render();
@@ -443,6 +444,7 @@ refreshEntitlement();  // no aparelho, reconcilia com a StoreKit (async)
 fitGame();
 initClouds();
 CUR = generateLevel(0, 1); // cena de fundo do título
+initScenery();
 goat = {x:210,y:400,vx:0,vy:0,onGround:true,face:'happy',angle:0,spinning:false,plat:0};
 loop();
 
