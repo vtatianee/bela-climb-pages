@@ -36,7 +36,10 @@ function resetJuice() {
   juice.blinkAt = performance.now() + 2500;
 }
 
-function addShake(px) { juice.shake = Math.min(14, juice.shake + px); }
+// Diagnóstico de desempenho: ?nojuice no endereço desliga todos estes efeitos.
+const JUICE_OFF = location.search.includes('nojuice');
+
+function addShake(px) { if (!JUICE_OFF) juice.shake = Math.min(14, juice.shake + px); }
 
 /** Mola amortecida: puxa `o[k]` para `target` usando a velocidade `o[kv]`. */
 function spring(o, k, kv, target, stiff, damp) {
@@ -47,6 +50,7 @@ function spring(o, k, kv, target, stiff, damp) {
 
 function updateJuice() {
   juice.t++;
+  if (JUICE_OFF) { juice.sq = juice.sqv = 0; return; }
   juice.shake *= 0.86;
   if (juice.shake < 0.15) juice.shake = 0;
 
@@ -77,7 +81,7 @@ function dragPower() {
 function onLandImpact(pi, impact) {
   // deslizando, a física "repousa" a Bela a cada frame com impacto ~0.45:
   // só conta como pouso de verdade acima disso
-  if (impact < 1.5) return;
+  if (impact < 1.5 || JUICE_OFF) return;
   const k = Math.min(1, impact / 14);                 // 0 (leve) .. 1 (forte)
   juice.sqv += 0.12 + k * 0.35;                       // achatada na hora
   const d = juice.dips[pi] || (juice.dips[pi] = { y: 0, v: 0 });

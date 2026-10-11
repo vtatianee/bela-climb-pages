@@ -399,6 +399,7 @@ function drawParticles() {
  *  - no ar: estica na direção do movimento, proporcional à velocidade.
  */
 function applyGoatSquash() {
+  if (JUICE_OFF) return;
   if (goat.onGround) {
     const breath = drag ? 0 : Math.sin(juice.t * 0.07) * 0.02;
     const sq = juice.sq - breath;

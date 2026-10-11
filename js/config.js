@@ -80,7 +80,9 @@ const W = canvas.width, H = canvas.height;
 // 420x680 pt (o #gameWrapper escala isso). O contexto é escalado por DPR no
 // início de cada frame (render.js), então o jogo desenha em coordenadas lógicas
 // e sai nítido. Limitado a 3x (iPhones são 2x/3x) por custo/benefício.
-const DPR = Math.min(window.devicePixelRatio || 1, 3);
+// Diagnóstico de desempenho: ?dpr=1 ou ?dpr=2 no endereço força uma resolução menor.
+const DPR = Math.min(window.devicePixelRatio || 1, 3,
+  Number(new URLSearchParams(location.search).get('dpr')) || 3);
 canvas.width  = W * DPR;
 canvas.height = H * DPR;
 canvas.style.width  = W + 'px';
