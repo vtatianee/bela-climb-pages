@@ -48,7 +48,11 @@ async function triggerHaptic(type = 'LIGHT') {
 function stepPhysics() {
   // atualiza partículas
   particles = particles.filter(p => p.life > 0);
-  for (const p of particles) { p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life--; }
+  for (const p of particles) {
+    p.x += p.vx; p.y += p.vy; p.life--;
+    if (p.puff) { p.vx *= 0.92; p.vy *= 0.92; p.r += 0.35; }  // nuvem de poeira: freia e cresce
+    else p.vy += 0.15;
+  }
 
   if (goat.onGround || drag) return;
 
@@ -85,7 +89,7 @@ function stepPhysics() {
       if (Math.abs(ddx) > Math.abs(ddy)) {
         goat.x += (ddx / d) * push;   // empurrada para o lado
         goat.vx *= -BOUNCE;
-        goat.face = 'dizzy'; sndLand();
+        goat.face = 'dizzy'; sndLand(); addShake(2);
       } else {
         if (ddy < 0) {                // bateu no topo do obstáculo
           goat.y += (ddy / d) * push;
@@ -109,10 +113,11 @@ function stepPhysics() {
     if (goat.vy >= 0 &&
         goat.y + GOAT_R >= p.y && goat.y + GOAT_R <= p.y + PH + 12 &&
         goat.x > p.x && goat.x < p.x + p.w) {
+      const impact = goat.vy;
       goat.y = p.y - GOAT_R;
       goat.vx *= FRICTION; goat.vy = 0;
       goat.spinning = false; goat.angle = 0;
-      sndLand(); spawnDust(goat.x, p.y);
+      sndLand(); spawnDust(goat.x, p.y); onLandImpact(pi, impact);
       if (Math.abs(goat.vx) < 0.5) {
         goat.vx = 0; goat.onGround = true; goat.face = 'happy';
         landOnPlatform(pi);
@@ -128,7 +133,7 @@ function stepPhysics() {
       goat.y = p.y + PH + GOAT_R;
       goat.vy *= -BOUNCE;            // cabeçada, quica de volta
       goat.face = 'dizzy';
-      sndLand();
+      sndLand(); addShake(3);
       break;
     }
 
@@ -187,6 +192,7 @@ function landOnPlatform(pi) {
  */
 function loseTry(msg) {
   triggerHaptic('HEAVY'); // impacto tátil de dano/erro
+  addShake(7);
   tries--;
   tryBadge.textContent = `${tries}`;
   if (tries <= 0) {

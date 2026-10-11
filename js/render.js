@@ -239,6 +239,7 @@ function drawPlatforms() {
   plats().forEach((p,i)=>{
     if (fallenPlats[i]) return;   // collapsed — don't draw
     ctx.save();
+    ctx.translate(0, platDipOf(i));   // afunda e volta ao receber a Bela (juice.js)
     if (weird) {
       // jittery, wobbling platforms (visual only — hitbox stays put)
       const t = Date.now()/120 + i*1.7;
@@ -343,17 +344,28 @@ function drawDragLine() {
   if (dist<4) return;
   const ang=Math.atan2(dy,dx), force=(dist/80)*MAX_FORCE;
   const vx0=Math.cos(ang)*force, vy0=Math.sin(ang)*force;
-  for (let t=0;t<30;t+=2){
+  const pct=dist/80;
+  const col = pct<0.5?'#7be04f':pct<0.8?'#ffcf2e':'#ff4d1f';
+  // trajetória: bolinhas com contorno escuro, legíveis em qualquer bioma
+  ctx.lineWidth=1.5; ctx.strokeStyle='rgba(40,25,10,0.45)';
+  for (let t=2;t<30;t+=2){
     const px=goat.x+vx0*t, py=goat.y+vy0*t+0.5*GRAVITY*t*t;
-    const r=Math.max(1,5-t*0.15), a=Math.max(0,0.7-t*0.022);
-    ctx.fillStyle=`rgba(255,230,100,${a})`;
-    ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2); ctx.fill();
+    const r=Math.max(1.5,5.5-t*0.15);
+    ctx.globalAlpha=Math.max(0,0.95-t*0.028);
+    ctx.fillStyle='#fff3c0';
+    ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
   }
-  const barW=80,barH=8,bx=16,by=H-30,pct=dist/80;
-  ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.roundRect(bx,by,barW,barH,4); ctx.fill();
-  ctx.fillStyle = pct<0.5?'#80e060':pct<0.8?'#ffd040':'#ff5020';
-  ctx.beginPath(); ctx.roundRect(bx,by,barW*pct,barH,4); ctx.fill();
-  ctx.fillStyle='#ffd580'; ctx.font='11px sans-serif'; ctx.fillText(t('force'),bx,by-4);
+  ctx.globalAlpha=1;
+  // arco de força ao redor da Bela: enche no sentido horário e muda de cor;
+  // no máximo, pulsa
+  const R = 32, cx = goat.x, cy = goat.y + 2;
+  const pulse = pct>0.97 ? Math.sin(juice.t*0.5)*2 : 0;
+  ctx.lineCap='round';
+  ctx.strokeStyle='rgba(0,0,0,0.28)'; ctx.lineWidth=7;
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+  ctx.strokeStyle=col; ctx.lineWidth=5+pulse;
+  ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,-Math.PI/2+pct*Math.PI*2); ctx.stroke();
+  ctx.lineCap='butt';
 }
 
 function drawParticles() {
@@ -368,6 +380,11 @@ function drawParticles() {
       const hue = 8 + k * 42; // 8 (red) -> 50 (yellow)
       ctx.fillStyle = `hsl(${hue}, 100%, ${50 + k*15}%)`;
       ctx.beginPath(); ctx.arc(p.x, p.y, 2 + k*3, 0, Math.PI*2); ctx.fill();
+    } else if (p.puff) {
+      // nuvem de poeira macia que cresce enquanto some (juice.js)
+      ctx.globalAlpha = Math.max(0, p.life/36) * 0.6;
+      ctx.fillStyle = p.snow ? '#ffffff' : '#ead9b8';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
     } else {
       ctx.fillStyle = p.gold ? '#ffe060' : p.snow ? '#ffffff' : '#c8a878';
       ctx.beginPath(); ctx.arc(p.x,p.y, p.gold?3:2, 0,Math.PI*2); ctx.fill();
@@ -376,8 +393,31 @@ function drawParticles() {
   ctx.globalAlpha = 1;
 }
 
+/**
+ * Deformação "elástica" da Bela (juice.js), aplicada antes do desenho:
+ *  - no chão: achata/estica a partir dos pés (mira, pouso, respiração);
+ *  - no ar: estica na direção do movimento, proporcional à velocidade.
+ */
+function applyGoatSquash() {
+  if (goat.onGround) {
+    const breath = drag ? 0 : Math.sin(juice.t * 0.07) * 0.02;
+    const sq = juice.sq - breath;
+    const FEET = 21;                     // pés da Bela, em coords locais
+    ctx.translate(0, FEET);
+    ctx.scale(1 + sq * 0.8, 1 - sq);
+    ctx.translate(0, -FEET);
+  } else {
+    const sp = Math.hypot(goat.vx, goat.vy);
+    const s = Math.min(0.28, Math.min(0.2, sp * 0.012) - Math.min(0, juice.sq) * 0.4);
+    const a = Math.atan2(goat.vy, goat.vx);
+    ctx.rotate(a); ctx.scale(1 + s, 1 - s * 0.7); ctx.rotate(-a);
+  }
+}
+
 function drawGoat(x,y,face,angle) {
-  ctx.save(); ctx.translate(x,y); ctx.rotate(angle);
+  ctx.save(); ctx.translate(x,y);
+  applyGoatSquash();
+  ctx.rotate(angle);
   const body='#f5f0e8';
   // contorno escuro (2px) destaca a Bela de qualquer fundo, inclusive neve/lago claros
   ctx.fillStyle=body; ctx.strokeStyle='#3a2f22'; ctx.lineWidth=2;
@@ -399,6 +439,32 @@ function drawGoat(x,y,face,angle) {
     ctx.beginPath(); ctx.arc(4.2,-12,0.7,0,Math.PI*2); ctx.fill();
     ctx.strokeStyle='#4a3010'; ctx.lineWidth=1.5;
     ctx.beginPath(); ctx.arc(0,-8,3,0.2,Math.PI-0.2); ctx.stroke();
+  } else if (face==='blink') {
+    // olhos fechados (piscada), mantém o sorriso
+    ctx.strokeStyle='#2a1a00'; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.arc(-3.5,-11.5,2.2,0.15,Math.PI-0.15); ctx.stroke();
+    ctx.beginPath(); ctx.arc(3.5,-11.5,2.2,0.15,Math.PI-0.15); ctx.stroke();
+    ctx.strokeStyle='#4a3010'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(0,-8,3,0.2,Math.PI-0.2); ctx.stroke();
+  } else if (face==='aim') {
+    // concentrada: olhos apertados, sobrancelhas franzidas, boca firme
+    ctx.fillStyle='#2a1a00';
+    ctx.beginPath(); ctx.ellipse(-3.5,-11,2.2,1.3,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(3.5,-11,2.2,1.3,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#4a3010'; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(-6,-15.5); ctx.lineTo(-1.5,-13.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(6,-15.5); ctx.lineTo(1.5,-13.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-2.5,-6.5); ctx.lineTo(2.5,-6.5); ctx.stroke();
+  } else if (face==='scared') {
+    // susto: olhos arregalados com pupila pequena, boca em "O"
+    ctx.fillStyle='#fff'; ctx.strokeStyle='#2a1a00'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(-3.8,-11.5,3,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(3.8,-11.5,3,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#2a1a00';
+    ctx.beginPath(); ctx.arc(-3.8,-11,1.1,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(3.8,-11,1.1,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#6a2a10';
+    ctx.beginPath(); ctx.ellipse(0,-5.5,2,2.6,0,0,Math.PI*2); ctx.fill();
   } else if (face==='dizzy') {
     ctx.strokeStyle='#cc2200'; ctx.lineWidth=2;
     ctx.beginPath(); ctx.moveTo(-5,-13); ctx.lineTo(-2,-10); ctx.stroke();
@@ -490,12 +556,20 @@ function render() {
   // (420x680) num backing store DPR× maior, sem depender do estado anterior.
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   ctx.clearRect(0,0,W,H);
+  // tremor de tela (juice.js): desloca a cena e amplia um pouco, para que as
+  // bordas nunca mostrem o fundo vazio durante o tremor
+  if (juice.shake > 0) {
+    const s = juice.shake, z = 1 + s / 140;
+    ctx.translate(W/2, H/2); ctx.scale(z, z);
+    ctx.translate(-W/2 + (Math.random()-0.5)*2*s, -H/2 + (Math.random()-0.5)*2*s);
+  }
   drawBg();
   if (!CUR.weird) updateAndDrawClouds();
   drawPlatforms(); drawObstacle(); drawGoal(); drawParticles(); drawDragLine();
   if (isHard) drawRocks();
   if (isHard && won) goat.angle += 0.35;  // spicy spin after eating the chili
-  drawGoat(goat.x,goat.y,goat.face,goat.angle);
+  const dip = goat.onGround ? platDipOf(goat.plat) : 0;   // acompanha a plataforma que afunda
+  drawGoat(goat.x, goat.y + dip, goatDisplayFace(), goat.angle);
   if (isHard) drawWolf();   // wolf in front, at the bottom
 }
 

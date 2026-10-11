@@ -136,6 +136,7 @@
   .pauseAction:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.3); }
   .pauseAction.resume  { background: linear-gradient(180deg, #6fae4a, #54822f); border-color: #3a5e1f; }
   .pauseAction.restart { background: linear-gradient(180deg, #f0b84a, #d4872a); border-color: #9a5e1c; color: #4a2c08; text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
+  .pauseAction.backstart { background: linear-gradient(180deg, #a8779a, #7d5177); border-color: #563a52; }
   .pauseAction.quit    { background: linear-gradient(180deg, #5c7a92, #3f5a6e); border-color: #2e4354; }
 
   /* ----- Botão de Conquistas -----

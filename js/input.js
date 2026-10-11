@@ -64,8 +64,9 @@ function onUp(e) {
     const force = power * MAX_FORCE;
     goat.vx = Math.cos(ang) * force; goat.vy = Math.sin(ang) * force;
     goat.onGround = false; goat.spinning = true; goat.jumping = true;
-    goat.face = power > 0.6 ? 'dizzy' : 'happy';
+    goat.face = 'happy';   // no ar, juice.js troca para "susto" se ela despencar
     sndJump(power); sndBleat();
+    juice.sqv -= 0.1 + power * 0.2;     // solta o estilingue: a Bela estica (juice.js)
     jumpCount++;   // a plataforma-surpresa dispara a cada 4 saltos (ver updateSurprise)
   }
   drag = null;

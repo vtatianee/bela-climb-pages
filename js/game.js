@@ -87,6 +87,7 @@ function initLevel() {
   goat = { x: startX, y: sp.y - GOAT_R, vx:0, vy:0, onGround:true, face:'happy', angle:0, spinning:false, plat:0 };
   goat.safeX = goat.x; goat.safeY = goat.y; goat.jumping = false;
   drag = null; won = false; lost = false; particles = [];
+  resetJuice();
   maxTries = START_TRIES; tries = START_TRIES;
   lvlBadge.textContent = t('world_level', world+1, sub);
   document.querySelector('#lvlBadge .icon').textContent = '⛰️';
@@ -172,7 +173,7 @@ function advanceLevel() {
 }
 
 // ---------- Loop principal ----------
-function loop(){ updateSurprise(); updateHazards(); stepPhysics(); render(); animFrame=requestAnimationFrame(loop); }
+function loop(){ updateSurprise(); updateHazards(); stepPhysics(); updateJuice(); render(); animFrame=requestAnimationFrame(loop); }
 
 // ---------- Botao de reiniciar fase (apos game over) ----------
 btnNext.addEventListener('click',()=>{
@@ -266,6 +267,18 @@ btnRestart.addEventListener('click', () => {
   initLevel();                          // devolve as 5 vidas e remonta a fase
 });
 btnQuit.addEventListener('click', backToTitle);
+
+const btnBackToStart = document.getElementById('btnBackToStart');
+btnBackToStart.addEventListener('click', () => {
+  paused = false;
+  pauseMenu.classList.remove('show');
+  if (audioCtx) audioCtx.resume();
+  if (soundOn) setMusicMuted(false);
+  world = 0; sub = 1;
+  savedProgress[difficulty] = { world, sub };
+  saveProgress();
+  initLevel();
+});
 
 // ---------- Tela de conquistas ----------
 // Acessível do menu de pausa e da tela de título. Não mexe no estado do jogo:
