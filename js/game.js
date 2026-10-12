@@ -228,6 +228,12 @@ function startGame(diff) {
     titleEl.style.display = 'none';
     wrapperEl.classList.add('playing');  // revela o HUD (escondido na tela inicial)
     started = true; paused = false;
+    // "Começar da Fase 1-1" armado na tela inicial: zera só a posição deste modo
+    if (freshStart) {
+      savedProgress[diff] = { world: 0, sub: 1 };
+      saveProgress();
+      setFreshStart(false);
+    }
     // retoma o progresso salvo desta dificuldade (ou começa do início)
     const p = savedProgress[diff] || { world: 0, sub: 1 };
     world = p.world; sub = p.sub;
@@ -239,6 +245,36 @@ function startGame(diff) {
 
 btnEasy.addEventListener('click', () => startGame('easy'));
 btnHard.addEventListener('click', () => startGame('hard'));
+
+// ---------- Tela inicial: onde cada modo continua + "Começar da Fase 1-1" ----------
+const btnFromStart = document.getElementById('btnFromStart');
+const diffPromptEl = titleEl.querySelector('.diffPrompt');
+let freshStart = false;   // true = a próxima dificuldade escolhida começa na 1-1
+
+/** Fase em que o modo realmente continua (respeita o bloqueio da compra). */
+function resumePoint(diff) {
+  const p = savedProgress[diff] || { world: 0, sub: 1 };
+  return levelLocked(p.world, p.sub) ? { world: 0, sub: FREE_SUBS } : p;
+}
+const atStart = p => p.world === 0 && p.sub === 1;
+
+/** Atualiza as legendas dos botões de dificuldade e mostra/esconde o "Começar da 1-1". */
+function refreshTitle() {
+  for (const [diff, el] of [['easy', 'subEasy'], ['hard', 'subHard']]) {
+    const p = resumePoint(diff);
+    document.getElementById(el).textContent =
+      freshStart ? t('starts_at_start') : atStart(p) ? '' : t('continue_at', p.world + 1, p.sub);
+  }
+  const anyProgress = !atStart(resumePoint('easy')) || !atStart(resumePoint('hard'));
+  btnFromStart.style.display = (anyProgress || freshStart) ? 'flex' : 'none';
+  btnFromStart.classList.toggle('armed', freshStart);
+  document.getElementById('fromStartText').textContent = t(freshStart ? 'cancel' : 'from_start');
+  diffPromptEl.textContent = t(freshStart ? 'from_start_pick' : 'choose_difficulty');
+  titleEl.classList.toggle('fresh', freshStart);
+}
+
+function setFreshStart(on) { freshStart = on; refreshTitle(); }
+btnFromStart.addEventListener('click', () => setFreshStart(!freshStart));
 
 // ---------- Menu de pausa ----------
 // Rede de segurança: o jogador pode reiniciar a fase ou trocar de dificuldade a
@@ -284,6 +320,7 @@ function backToTitle() {
   hideMsg();
   titleEl.classList.remove('fade-out');
   titleEl.style.display = 'flex';
+  refreshTitle();                       // mostra onde cada modo vai continuar
   loop();                               // mantém a cena viva (nuvens) atrás do título
 }
 
@@ -445,6 +482,7 @@ fitGame();
 initClouds();
 CUR = generateLevel(0, 1); // cena de fundo do título
 initScenery();
+refreshTitle();
 goat = {x:210,y:400,vx:0,vy:0,onGround:true,face:'happy',angle:0,spinning:false,plat:0};
 loop();
 

@@ -294,6 +294,22 @@
   .diffBtn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.3), 0 3px 8px rgba(0,0,0,0.3); }
   .diffBtn.easy { background: linear-gradient(180deg, #6fae4a, #54822f); border-color: #3a5e1f; }
   .diffBtn.hard { background: linear-gradient(180deg, #e0683a, #b8401c); border-color: #7e2810; }
+  .diffLabel { display: flex; flex-direction: column; align-items: center; line-height: 1.15; }
+  .diffSub { font-size: 12px; font-weight: 600; opacity: 0.9; text-shadow: 0 1px 0 rgba(0,0,0,0.35); }
+  .diffSub:empty { display: none; }
+  /* "Começar da Fase 1-1": ação secundária em forma de link. Ao ser tocado fica
+     "armado" (destacado) até a escolha da dificuldade, ou até tocar de novo. */
+  .fromStartBtn {
+    font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px;
+    margin: 6px 0 2px; padding: 7px 16px; border-radius: 18px;
+    background: transparent; border: 2px solid rgba(207,226,242,0.35);
+    color: #cfe2f2; cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .fromStartBtn .ico { width: 16px; height: 16px; }
+  .fromStartBtn.armed { background: #ffe0a0; border-color: #ffe0a0; color: #3a2a10; }
+  #title.fresh .diffBtn { animation: pulse 1.2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
   #title .hint { color: #6f98b8; font-size: 13px; margin-top: 26px; max-width: 280px; text-align: center; line-height: 1.5; }
 
