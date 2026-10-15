@@ -12,6 +12,15 @@ Conversar com a usuária em português.
   (GitHub Pages, branch `main`, raiz; atualiza ~1 min após o push).
   No navegador a compra é simulada (`js/iap.js` usa mock) e não há haptics.
 
+## Fases
+- Premissa: nenhuma fase pode travar a Bela.
+- Cabra Mansa: 5 a 8 plataformas, alturas e posições sorteadas a cada fase
+  (`variedHeights`/`variedX` em `js/levels.js`), dentro de limites: degrau de
+  66 a 120px, alcance do salto e corredor livre de 44px na plataforma de baixo.
+  Cabra da Peste continua com 6 plataformas em alturas fixas.
+- Ao mexer na geração ou na plataforma-surpresa, rode `scripts/verifica-fases.js`
+  no console do navegador (instruções no arquivo). Esperado: 0 falhas.
+
 ## Compra no app (IAP)
 - Produto não-consumível `com.vtatianee.belaclimb.fullunlock`; grátis até a
   fase 1-3 (`FREE_SUBS` em `js/game.js`).

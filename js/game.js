@@ -41,7 +41,8 @@ function initLevel() {
   transitionTimers.forEach(clearTimeout);
   transitionTimers = [];
   // build the current level procedurally for this world/subfase
-  CUR = generateLevel(world, sub);
+  // Cabra Mansa: quantidade, alturas e posições das plataformas variam a cada fase
+  CUR = generateLevel(world, sub, difficulty === 'easy');
   initScenery();      // seres do bioma (pássaros, neve, brasas...)
   const lv = CUR;
   // apply the difficulty width multiplier (hitbox follows p.w/p.x)
