@@ -461,6 +461,12 @@ function drawParticles() {
       const hue = 8 + k * 42; // 8 (red) -> 50 (yellow)
       ctx.fillStyle = `hsl(${hue}, 100%, ${50 + k*15}%)`;
       ctx.beginPath(); ctx.arc(p.x, p.y, 2 + k*3, 0, Math.PI*2); ctx.fill();
+    } else if (p.confetti) {
+      // confete girando: o cosseno da rotação "achata" o papel, como se virasse
+      ctx.globalAlpha = Math.min(1, p.life / 30);
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.scale(1, Math.cos(p.rot * 1.7));
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
     } else if (p.puff) {
       // nuvem de poeira macia que cresce enquanto some (juice.js)
       ctx.globalAlpha = Math.max(0, p.life/36) * 0.6;
@@ -653,8 +659,11 @@ function render() {
   if (isHard && won) goat.angle += 0.35;  // spicy spin after eating the chili
   drawAmbientFront();  // neve, brasas, folhas caindo (scenery.js)
   const dip = goat.onGround ? platDipOf(goat.plat) : 0;   // acompanha a plataforma que afunda
-  drawGoat(goat.x, goat.y + dip, goatDisplayFace(), goat.angle);
+  const dance = goatDance();   // depois de vencer, ela dança (celebrate.js)
+  drawGoat(goat.x, goat.y + dip + dance.dy, goatDisplayFace(), goat.angle + dance.tilt);
   if (isHard) drawWolf();   // wolf in front, at the bottom
+  drawWinStars();           // estrelas grandes ao vencer (celebrate.js)
+  drawTitleGoat();          // Bela pulando na tela inicial, no canvas próprio dela
 }
 
 function drawRocks() {

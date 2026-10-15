@@ -71,7 +71,9 @@
 
 // ---------- Referências ao DOM / Canvas ----------
 const canvas  = document.getElementById('c');
-const ctx     = canvas.getContext('2d');
+// `let`: a Bela da tela inicial (juice.js) desenha num canvas próprio
+// trocando ctx temporariamente, para reaproveitar drawGoat sem duplicá-la.
+let ctx       = canvas.getContext('2d');
 // W/H continuam sendo as dimensões LÓGICAS (420x680) que todo o jogo usa.
 const W = canvas.width, H = canvas.height;
 

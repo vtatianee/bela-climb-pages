@@ -31,7 +31,7 @@
 
 // ---------- Mensagens de interface ----------
 // param nomeado 'msg' de propósito: 't' sombrearia a função global t() do i18n
-function showMsg(msg){ msgEl.textContent=msg; msgEl.classList.add('show'); }
+function showMsg(msg){ msgEl.textContent=msg; msgEl.classList.add('show'); bump(msgEl, 'pop'); }
 function hideMsg(){ msgEl.classList.remove('show'); }
 
 // ---------- Ciclo de fase ----------
@@ -90,8 +90,11 @@ function initLevel() {
   goat.safeX = goat.x; goat.safeY = goat.y; goat.jumping = false;
   drag = null; won = false; lost = false; particles = [];
   resetJuice();
+  clearCelebration();
   maxTries = START_TRIES; tries = START_TRIES;
-  lvlBadge.textContent = t('world_level', world+1, sub);
+  const lvlText = t('world_level', world+1, sub);
+  if (lvlBadge.textContent !== lvlText) bump(lvlBadge.parentElement, 'pop');   // fase nova: o selo salta
+  lvlBadge.textContent = lvlText;
   document.querySelector('#lvlBadge .icon').textContent = '⛰️';
   tryBadge.textContent = `${tries}`;
   btnNext.style.display = 'none';
@@ -129,6 +132,7 @@ function winLevel() {
   stars[starKey] = Math.max(stars[starKey]||0, s);
   saveProgress(); // persiste a melhor pontuação de estrelas
   achOnLevelWin(s); // avalia as conquistas desta fase
+  startCelebration(s); // confete + estrelas grandes + Bela dançando (celebrate.js)
   if (isHard) {
     // ate the chili: spicy fire particles + extra spin
     goat.spinning = true; goat.angle = 0;
@@ -137,10 +141,10 @@ function winLevel() {
       vx:(Math.random()-0.5)*7, vy:-Math.random()*6-1,
       life:34+Math.random()*16, fire:true
     });
-    showMsg(t('win_hard', `${'⭐'.repeat(s)}${'☆'.repeat(3-s)}`));
+    showMsg(t('win_hard', '').trim());   // as estrelas agora aparecem grandes na tela
   } else {
     for (let i=0;i<14;i++) particles.push({ x:goat.x, y:goat.y, vx:(Math.random()-0.5)*6, vy:-Math.random()*5-2, life:40, gold:true });
-    showMsg(t('win_easy', `${'⭐'.repeat(s)}${'☆'.repeat(3-s)}`));
+    showMsg(t('win_easy', '').trim());
   }
   [0,1,2].forEach((i)=>{ if(i<s) setTimeout(sndStar, 600+i*200); });
   // breve transição, depois carrega a próxima subfase automaticamente.
@@ -187,7 +191,7 @@ function loop(ts) {
   tickAcc += Math.min(100, now - lastTick);   // limita o "atraso" após travadas
   lastTick = now;
   while (tickAcc >= STEP_MS) {
-    updateSurprise(); updateHazards(); stepPhysics(); updateJuice(); updateScenery();
+    updateSurprise(); updateHazards(); stepPhysics(); updateJuice(); updateScenery(); updateCelebration();
     tickAcc -= STEP_MS;
   }
   render();

@@ -276,8 +276,21 @@
     font-family: 'Fredoka', sans-serif; font-weight: 700;
     color: #ffe0a0; font-size: 56px; letter-spacing: 2px;
     text-shadow: 0 4px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5); margin-bottom: 2px;
+    line-height: 1;
   }
-  #title .sub { color: #8fb8d8; font-size: 16px; letter-spacing: 6px; margin-bottom: 30px; font-weight: 600; }
+  /* letras do logo balançando em onda */
+  #title h1 span { display: inline-block; animation: letterBob 2.4s ease-in-out infinite; }
+  #title h1 span:nth-child(2) { animation-delay: 0.12s; }
+  #title h1 span:nth-child(3) { animation-delay: 0.24s; }
+  #title h1 span:nth-child(4) { animation-delay: 0.36s; }
+  @keyframes letterBob {
+    0%, 60%, 100% { transform: translateY(0) rotate(0); }
+    20% { transform: translateY(-7px) rotate(-4deg); }
+    40% { transform: translateY(1px) rotate(2deg); }
+  }
+  /* Bela pulando acima do logo (desenhada por celebrate.js) */
+  #titleGoat { box-shadow: none; border-radius: 0; margin-bottom: -4px; }
+  #title .sub { color: #8fb8d8; font-size: 16px; letter-spacing: 6px; margin-bottom: 18px; font-weight: 600; }
   #title .diffPrompt { color: #cfe2f2; font-size: 16px; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.5px; }
   .diffBtn {
     font-family: 'Fredoka', sans-serif; font-weight: 700;
@@ -312,7 +325,43 @@
   .fromStartBtn.armed { background: #ffe0a0; border-color: #ffe0a0; color: #3a2a10; }
   #title.fresh .diffBtn { animation: pulse 1.2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
-  #title .hint { color: #6f98b8; font-size: 13px; margin-top: 26px; max-width: 280px; text-align: center; line-height: 1.5; }
+  #title .hint { color: #6f98b8; font-size: 13px; margin-top: 16px; max-width: 290px; text-align: center; line-height: 1.45; }
+
+  /* ----- Botões "apertáveis" -----
+     Afundam rápido ao toque e voltam com um quique (a curva passa do ponto e
+     retorna). A transição longa vale para a VOLTA; :active a encurta. */
+  .diffBtn, .pauseAction, .achBtn, .fromStartBtn, #soundBtn, #pauseBtn, #btnNext {
+    transition: transform 0.32s cubic-bezier(.34, 1.9, .5, 1), filter 0.15s;
+  }
+  .diffBtn:active, .pauseAction:active, .achBtn:active, .fromStartBtn:active,
+  #soundBtn:active, #pauseBtn:active, #btnNext:active { transition-duration: 0.06s; }
+  .diffBtn:active, .pauseAction:active, .achBtn:active { transform: translateY(4px) scale(0.95); }
+  .fromStartBtn:active { transform: scale(0.94); }
+  #soundBtn:active { transform: translateX(-50%) translateY(3px) scale(0.9); }
+  #pauseBtn:active { transform: translateY(3px) scale(0.9); }
+  #btnNext:active  { transform: translateX(-50%) translateY(3px) scale(0.95); }
+
+  /* ----- Selos do HUD ----- */
+  .badge.hit { animation: badgeHit 0.5s ease-out; }        /* perdeu uma vida */
+  @keyframes badgeHit {
+    0%   { transform: translateX(0) scale(1); }
+    15%  { transform: translateX(-6px) scale(1.12); background: linear-gradient(180deg, #e0583a, #b8341c); }
+    35%  { transform: translateX(6px) scale(1.08); }
+    55%  { transform: translateX(-4px); }
+    75%  { transform: translateX(2px); }
+    100% { transform: translateX(0) scale(1); }
+  }
+  .badge.pop { animation: badgePop 0.45s cubic-bezier(.34, 1.9, .5, 1); }   /* fase nova */
+  @keyframes badgePop { 0% { transform: scale(0.6); } 100% { transform: scale(1); } }
+
+  /* ----- Entradas com "pulinho" ----- */
+  #message.pop { animation: msgPop 0.35s cubic-bezier(.34, 1.9, .5, 1); }
+  @keyframes msgPop {
+    0%   { transform: translateX(-50%) scale(0.6); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+  #pauseMenu.show .pauseCard, #paywall.show .paywallCard { animation: cardPop 0.38s cubic-bezier(.34, 1.7, .5, 1); }
+  @keyframes cardPop { 0% { transform: scale(0.82); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
   /* ----- SUPER CAPIM SAGRADO ----- */
   .super-capim {

@@ -51,6 +51,7 @@ function stepPhysics() {
   for (const p of particles) {
     p.x += p.vx; p.y += p.vy; p.life--;
     if (p.puff) { p.vx *= 0.92; p.vy *= 0.92; p.r += 0.35; }  // nuvem de poeira: freia e cresce
+    else if (p.confetti) { p.vy = Math.min(p.vy + 0.06, 2.2); p.vx *= 0.985; p.x += Math.sin(p.life * 0.15) * 0.4; p.rot += p.vr; }  // confete flutua
     else p.vy += 0.15;
   }
 
@@ -195,6 +196,7 @@ function loseTry(msg) {
   addShake(7);
   tries--;
   tryBadge.textContent = `${tries}`;
+  bump(tryBadge.parentElement, 'hit');   // o selo de vidas treme (celebrate.js)
   if (tries <= 0) {
     lost = true;
     showMsg(t('game_over'));

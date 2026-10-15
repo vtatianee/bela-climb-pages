@@ -42,6 +42,7 @@ Direção: cartoon com muito movimento, mantendo a identidade atual.
 2. Mundo (FEITA, em `js/scenery.js` + `drawPlatforms` de `render.js`):
    plataformas por bioma (tronco, jangada, vitória-régia, basalto, gelo),
    montanhas com parallax, seres do ambiente, céus mais saturados.
-3. Comemoração e UI: confete, estrelas animadas, tela inicial animada,
-   botões "apertáveis".
+3. Comemoração e UI (FEITA, em `js/celebrate.js` + CSS): confete, estrelas
+   grandes ao vencer, Bela dançando, Bela pulando e logo balançando na tela
+   inicial, botões que afundam e quicam, selos do HUD e mensagens animados.
 O Figma está conectado (MCP) para telas, arte dos biomas e material da loja.
